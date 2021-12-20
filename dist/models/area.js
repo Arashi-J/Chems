@@ -11,6 +11,9 @@ const AreaSchema = new mongoose_1.Schema({
     status: {
         type: Boolean,
         default: true
+    },
+    chemicals: {
+        type: [mongoose_1.Schema.Types.ObjectId],
     }
 });
 exports.AreaModel = (0, mongoose_1.model)('Area', AreaSchema);

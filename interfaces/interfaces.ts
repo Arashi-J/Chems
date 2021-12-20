@@ -12,14 +12,16 @@ export interface Role {
 }
 
 export interface Area {
-    name: String;
+    name: string;
     status: boolean;
+    chemicals?: Chemical[];
 }
 
-export interface Chemmical {
-    name: String;
+export interface Chemical {
+    name: string;
+    hazards?: Hazard[]
 }
 
 export interface Hazard {
-    name: String;
+    name: string;
 }

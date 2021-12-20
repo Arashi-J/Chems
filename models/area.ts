@@ -10,6 +10,9 @@ const AreaSchema = new Schema<Area>({
     status: {
         type: Boolean,
         default: true
+    },
+    chemicals:{
+        type: [Schema.Types.ObjectId],
     }
 
 });
