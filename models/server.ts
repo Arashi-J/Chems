@@ -1,17 +1,22 @@
-import express, { Application } from "express";
 import cors from 'cors';
+import express, { Application } from "express";
+
 import { dbConnection } from "../database/config.db";
+
+import usersRoutes from '../routes/users.routes';
+import areasRoutes from '../routes/areas.routes';
 
 export class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-
+        users: '/api/users',
+        areas: '/api/areas'
     }
 
     constructor() {
         this.app = express();
-        this.port = '8080';
+        this.port = process.env.PORT || '8090';
 
         //Initial methods
         this.dbConnect();
@@ -37,7 +42,8 @@ export class Server {
     }
 
     routes(){
-
+        this.app.use(this.apiPaths.users, usersRoutes)
+        this.app.use(this.apiPaths.areas, areasRoutes)
     }
 
     listen() {

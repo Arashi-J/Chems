@@ -1,8 +1,8 @@
-import * as dotenv from "dotenv";
+import { config } from 'dotenv';
 import Server from "./models/server";
 
 //dotenv config
-dotenv.config({ path: __dirname + '/.env' });
+config();
 
 //server init
 
