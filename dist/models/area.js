@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AreaModel = void 0;
 const mongoose_1 = require("mongoose");
 const AreaSchema = new mongoose_1.Schema({
-    name: {
+    area: {
         type: String,
-        required: true,
+        required: [true, 'El nombre del área es obligatorio'],
         unique: true
     },
     status: {
@@ -14,6 +14,7 @@ const AreaSchema = new mongoose_1.Schema({
     },
     chemicals: {
         type: [mongoose_1.Schema.Types.ObjectId],
+        ref: 'Chemical'
     }
 });
 exports.AreaModel = (0, mongoose_1.model)('Area', AreaSchema);

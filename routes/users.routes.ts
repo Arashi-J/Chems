@@ -1,17 +1,37 @@
 import {Router} from 'express';
 import {check} from 'express-validator';
 
-import { createUser, getUsers } from '../controllers/users.controllers';
+import { createUser, getUsers, getUser, updateUser } from '../controllers/users.controllers';
+import { existingEmail, validRole } from '../helpers/db-validators';
+import { requestValidator } from '../middlewares/middlewares';
 
 const router = Router();
 
-//User listing
+//List Users
 router.get('/', getUsers);
 
+//Look for user by id
+router.get('/:id',[
+    check('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
+    requestValidator
+] , getUser)
 
-//User creation
-router.post('/', createUser);
+//Create user
+router.post('/',[
+    check('name', 'El nombre no puede estar vacío').notEmpty(),
+    check('password', 'El password debe contener mínimo 6 carácteres').isLength({min: 6}),
+    check('email', 'El correo no es válido').isEmail(),
+    check('email').custom(existingEmail),
+    check('role').custom(validRole),
+    
+    requestValidator
+] ,createUser);
 
+//Update User
+router.put('/:id',[
+    check('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
+    requestValidator
+], updateUser);
 
 
 

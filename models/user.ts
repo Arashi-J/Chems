@@ -21,7 +21,7 @@ const UserSchema = new Schema<User>({
         required: [true, "El rol del usuario es obligatorio"]
     },
     areas: {
-        type: Array,
+        type: [Schema.Types.ObjectId],
     },
     status: {
         type: Boolean,

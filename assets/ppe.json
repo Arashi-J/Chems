@@ -1,6 +1,26 @@
 [
     {
-        "ppe": "",
-        "img": ""
+        "ppe": "boots",
+        "img": "./img/ppe-icons/boots.png"
+    },
+    {
+        "ppe": "face-shield",
+        "img": "./img/ppe-icons/face-shield.png"
+    },
+    {
+        "ppe": "gas-mask",
+        "img": "./img/ppe-icons/gas-mask.png"
+    },
+    {
+        "ppe": "glasses",
+        "img": "./img/ppe-icons/glasses.png"
+    },
+    {
+        "ppe": "gloves",
+        "img": "./img/ppe-icons/gloves.png"
+    },
+    {
+        "ppe": "protective-suit",
+        "img": "./img/ppe-icons/protective-suit.png"
     }
 ]
