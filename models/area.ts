@@ -2,9 +2,9 @@ import {Schema, model} from 'mongoose';
 import { Area } from '../interfaces/interfaces';
 
 const AreaSchema = new Schema<Area>({
-    name: {
+    area: {
         type: String,
-        required: true,
+        required: [true, 'El nombre del área es obligatorio'],
         unique: true
     },
     status: {
@@ -13,6 +13,7 @@ const AreaSchema = new Schema<Area>({
     },
     chemicals:{
         type: [Schema.Types.ObjectId],
+        ref: 'Chemical'
     }
 
 });

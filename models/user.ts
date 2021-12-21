@@ -4,21 +4,21 @@ import { User } from "../interfaces/interfaces";
 const UserSchema = new Schema<User>({
     name: {
         type: String,
-        required: [true, 'The name is mandatory'],
+        required: [true, 'El nombre es obligatorio'],
         unique: true
     },
     password: {
         type: String,
-        required: [true, "The password is mandatory"]
+        required: [true, "La contraseña es obligatoria"]
     },
     email: {
         type: String,
-        required: [true, "The email is mandatory"],
+        required: [true, "El correo es obligatorio"],
         unique: true
     },
     role: {
         type: String,
-        required: [true, "The role is mandatory"]
+        required: [true, "El rol del usuario es obligatorio"]
     },
     areas: {
         type: Array,

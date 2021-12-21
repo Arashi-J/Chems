@@ -8,11 +8,11 @@ export interface User {
 }
 
 export interface Role {
-    name: string;
+    role: string;
 }
 
 export interface Area {
-    name: string;
+    area: string;
     status: boolean;
     chemicals?: Chemical[];
 }
@@ -20,11 +20,12 @@ export interface Area {
 export interface Chemical {
     name: string;
     hazards?: Hazard[]
-    phrases?: Phrase[];
+    pPhrases?: Phrase[];
+    hPhrases?: Phrase[];
     ppe?: PPE[];
     fsms: boolean;
     ems: boolean;
-    oshs: boolean;
+    oshms: boolean;
 }
 
 export interface Hazard {
