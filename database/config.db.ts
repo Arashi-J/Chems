@@ -2,10 +2,13 @@ import {connect} from "mongoose";
 
 export const dbConnection = async () => {
     try {
-        await connect('mongodb+srv://J:e6UKkF8ic4Axa9U8@jcluster.zpyqs.mongodb.net/Chem_DB' , {
-    
-        });
 
+        
+        await connect( process.env.BD_CNN!, {
+            
+        });
+        
+        
         console.log('Base de datos online')
 
     }catch(error){

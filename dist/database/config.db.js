@@ -13,7 +13,7 @@ exports.dbConnection = void 0;
 const mongoose_1 = require("mongoose");
 const dbConnection = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield (0, mongoose_1.connect)('mongodb+srv://J:e6UKkF8ic4Axa9U8@jcluster.zpyqs.mongodb.net/Chem_DB', {});
+        yield (0, mongoose_1.connect)(process.env.BD_CNN, {});
         console.log('Base de datos online');
     }
     catch (error) {

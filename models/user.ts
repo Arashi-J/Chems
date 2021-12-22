@@ -5,7 +5,6 @@ const UserSchema = new Schema<User>({
     name: {
         type: String,
         required: [true, 'El nombre es obligatorio'],
-        unique: true
     },
     password: {
         type: String,
@@ -22,6 +21,8 @@ const UserSchema = new Schema<User>({
     },
     areas: {
         type: [Schema.Types.ObjectId],
+        ref: 'Area',
+        default: []
     },
     status: {
         type: Boolean,

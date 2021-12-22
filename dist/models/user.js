@@ -6,7 +6,6 @@ const UserSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: [true, 'El nombre es obligatorio'],
-        unique: true
     },
     password: {
         type: String,
@@ -23,6 +22,8 @@ const UserSchema = new mongoose_1.Schema({
     },
     areas: {
         type: [mongoose_1.Schema.Types.ObjectId],
+        ref: 'Area',
+        default: []
     },
     status: {
         type: Boolean,

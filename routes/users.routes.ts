@@ -1,9 +1,10 @@
-import {Router} from 'express';
-import {check} from 'express-validator';
+import { Router } from 'express';
+import { check } from 'express-validator';
+
+import { requestValidator } from '../middlewares/middlewares';
+import { existingUserId, existingEmail, validAreas, validRole } from '../helpers/db-validators';
 
 import { createUser, getUsers, getUser, updateUser } from '../controllers/users.controllers';
-import { existingEmail, validArea, validRole } from '../helpers/db-validators';
-import { requestValidator } from '../middlewares/middlewares';
 
 const router = Router();
 
@@ -11,25 +12,34 @@ const router = Router();
 router.get('/', getUsers);
 
 //Look for user by id
-router.get('/:id',[
+router.get('/:id', [
     check('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
     requestValidator
-] , getUser)
+], getUser)
 
 //Create user
-router.post('/',[
+router.post('/', [
     check('name', 'El nombre no puede estar vacío').notEmpty(),
-    check('password', 'El password debe contener mínimo 6 carácteres').isLength({min: 6}),
+    check('password', 'El password debe contener mínimo 6 carácteres').isLength({ min: 6 }),
     check('email', 'El correo no es válido').isEmail(),
     check('email').custom(existingEmail),
     check('role').custom(validRole),
-    check('areas', 'Uno o más valores inválidos').custom(validArea),
+    check('status', "el estado debe ser un booleano").isBoolean(),
+    check('areas', 'Uno o más valores inválidos').custom(validAreas),
     requestValidator
-] ,createUser);
+], createUser);
 
 //Update User
-router.put('/:id',[
+router.put('/:id', [
     check('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
+    check('id', 'Usuario no encontrado').custom(existingUserId),
+    check('name', 'El nombre no puede estar vacío').notEmpty().optional({ nullable: true }),
+    check('email', 'El correo no es válido').isEmail().optional({ nullable: true }),
+    check('email').custom(existingEmail),
+    check('password', 'El password debe contener mínimo 6 carácteres').isLength({ min: 6 }).optional({ nullable: true }),
+    check('role').custom(validRole).optional({ nullable: true }),
+    check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
+    check('areas', 'Uno o más valores inválidos').custom(validAreas).optional({ nullable: true }),
     requestValidator
 ], updateUser);
 

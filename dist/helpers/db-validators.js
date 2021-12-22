@@ -9,20 +9,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validArea = exports.validRole = exports.existingArea = exports.existingEmail = void 0;
+exports.validAreas = exports.validRole = exports.existingArea = exports.existingEmail = exports.existingUserId = void 0;
 const area_1 = require("../models/area");
 const role_1 = require("../models/role");
 const user_1 = require("../models/user");
+const existingUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingUser = yield user_1.UserModel.findById(id);
+    if (!existingUser) {
+        throw new Error(`Èl usuario con id ${id} no existe`);
+    }
+});
+exports.existingUserId = existingUserId;
 const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const existingEmail = yield user_1.UserModel.findOne({ email });
-    if (!existingEmail) {
+    if (existingEmail) {
         throw new Error(`El correo electrónico ${email} ya se encuentra en uso`);
     }
 });
 exports.existingEmail = existingEmail;
 const existingArea = (area) => __awaiter(void 0, void 0, void 0, function* () {
     const existingArea = yield area_1.AreaModel.findOne({ area });
-    if (!existingArea) {
+    if (existingArea) {
         throw new Error(`El área ${area} ya existe`);
     }
 });
@@ -34,13 +41,21 @@ const validRole = (role) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.validRole = validRole;
-const validArea = (areas) => {
-    areas.forEach((area) => __awaiter(void 0, void 0, void 0, function* () {
-        const validArea = yield area_1.AreaModel.findOne({ area });
-        if (!validArea) {
-            throw new Error(`El área ${area} no existe en el catalogo`);
+const validAreas = (areas) => __awaiter(void 0, void 0, void 0, function* () {
+    if (areas === []) {
+        return;
+    }
+    else {
+        for (const areaId of areas) {
+            if (areaId.length !== 24) {
+                throw new Error(`El valor ${areaId} no es un id de MongoDB válido`);
+            }
+            const validArea = yield area_1.AreaModel.findById(areaId);
+            if (!validArea) {
+                throw new Error(`El área con el id ${areaId} no existe en el catalogo`);
+            }
         }
-    }));
-};
-exports.validArea = validArea;
+    }
+});
+exports.validAreas = validAreas;
 //# sourceMappingURL=db-validators.js.map

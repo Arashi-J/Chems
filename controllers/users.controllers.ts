@@ -12,7 +12,8 @@ export const getUsers = async (req: Request, res: Response) => {
 
     const users = await UserModel.find(query)
         .skip(Number(searchFrom))
-        .limit(Number(resultsLimit));
+        .limit(Number(resultsLimit))
+        .populate('areas', 'area',);
 
     const totalUsers = await UserModel.countDocuments(query);
     
@@ -28,7 +29,7 @@ export const getUser = async (req: Request, res: Response) => {
 
     const { id } = req.params;
 
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findById(id).populate('areas', 'area',);
 
     if(user) {
         return res.status(200).json({
@@ -64,10 +65,17 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
 
     const { id } = req.params;
+    const {_id, password, ...newUserData} = req.body;
 
-    return res.status(200).json({
-        ok: true,
-        id
+    if(password){
+        const salt = bcryptjs.genSaltSync();
+        newUserData.password = bcryptjs.hashSync(password, salt);
+    }
+
+    const user = await UserModel.findByIdAndUpdate(id, newUserData, {new: true}).populate('areas', 'area');
+
+    return res.status(202).json({
+        user
     });
 
 }

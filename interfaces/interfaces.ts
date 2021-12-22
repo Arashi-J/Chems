@@ -9,6 +9,7 @@ export interface User {
 
 export interface Role {
     role: string;
+    role_name: string;
 }
 
 export interface Area {

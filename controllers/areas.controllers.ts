@@ -15,7 +15,7 @@ export const createArea = async(req: Request, res: Response) => {
     
     const newArea = new AreaModel({area, chemicals});
 
-    newArea.save();
+    await newArea.save();
     
     res.status(201).json({
         area

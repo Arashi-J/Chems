@@ -1,9 +1,10 @@
 import {Router} from 'express';
 import {check} from 'express-validator';
 
-import { createArea, getAreas } from '../controllers/areas.controllers';
-import { existingArea } from '../helpers/db-validators';
 import { requestValidator } from '../middlewares/middlewares';
+import { existingArea } from '../helpers/db-validators';
+
+import { createArea, getAreas } from '../controllers/areas.controllers';
 
 
 
@@ -16,7 +17,7 @@ router.get('/', getAreas);
 //Create Area
 router.post('/',[
     check('area', 'El nombre del área no puede estar vacío').notEmpty(),
-    existingArea,
+    check('area').custom(existingArea),
     requestValidator
 ] ,createArea);
 

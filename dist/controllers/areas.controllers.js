@@ -20,7 +20,7 @@ exports.getAreas = getAreas;
 const createArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { area, chemicals } = req.body;
     const newArea = new area_1.AreaModel({ area, chemicals });
-    newArea.save();
+    yield newArea.save();
     res.status(201).json({
         area
     });

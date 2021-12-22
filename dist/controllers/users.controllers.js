@@ -8,6 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -22,7 +33,8 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         userStatus === 'inactive' ? { status: false } : {};
     const users = yield user_1.UserModel.find(query)
         .skip(Number(searchFrom))
-        .limit(Number(resultsLimit));
+        .limit(Number(resultsLimit))
+        .populate('areas', 'area');
     const totalUsers = yield user_1.UserModel.countDocuments(query);
     return res.status(200).json({
         users,
@@ -33,7 +45,7 @@ exports.getUsers = getUsers;
 //Look for user by id
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const user = yield user_1.UserModel.findById(id);
+    const user = yield user_1.UserModel.findById(id).populate('areas', 'area');
     if (user) {
         return res.status(200).json({
             user
@@ -60,9 +72,14 @@ exports.createUser = createUser;
 //Update User
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    return res.status(200).json({
-        ok: true,
-        id
+    const _a = req.body, { _id, password } = _a, newUserData = __rest(_a, ["_id", "password"]);
+    if (password) {
+        const salt = bcryptjs_1.default.genSaltSync();
+        newUserData.password = bcryptjs_1.default.hashSync(password, salt);
+    }
+    const user = yield user_1.UserModel.findByIdAndUpdate(id, newUserData, { new: true }).populate('areas', 'area');
+    return res.status(202).json({
+        user
     });
 });
 exports.updateUser = updateUser;
