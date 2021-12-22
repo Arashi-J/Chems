@@ -20,6 +20,7 @@ router.post('/', [
     (0, express_validator_1.check)('email', 'El correo no es válido').isEmail(),
     (0, express_validator_1.check)('email').custom(db_validators_1.existingEmail),
     (0, express_validator_1.check)('role').custom(db_validators_1.validRole),
+    (0, express_validator_1.check)('areas', 'Uno o más valores inválidos').custom(db_validators_1.validArea),
     middlewares_1.requestValidator
 ], users_controllers_1.createUser);
 //Update User

@@ -18,11 +18,10 @@ const getAreas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getAreas = getAreas;
 const createArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name } = req.body;
-    const area = new area_1.AreaModel({ name });
-    area.save();
+    const { area, chemicals } = req.body;
+    const newArea = new area_1.AreaModel({ area, chemicals });
+    newArea.save();
     res.status(201).json({
-        ok: true,
         area
     });
 });

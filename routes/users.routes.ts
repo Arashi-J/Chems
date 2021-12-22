@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {check} from 'express-validator';
 
 import { createUser, getUsers, getUser, updateUser } from '../controllers/users.controllers';
-import { existingEmail, validRole } from '../helpers/db-validators';
+import { existingEmail, validArea, validRole } from '../helpers/db-validators';
 import { requestValidator } from '../middlewares/middlewares';
 
 const router = Router();
@@ -23,7 +23,7 @@ router.post('/',[
     check('email', 'El correo no es válido').isEmail(),
     check('email').custom(existingEmail),
     check('role').custom(validRole),
-    
+    check('areas', 'Uno o más valores inválidos').custom(validArea),
     requestValidator
 ] ,createUser);
 

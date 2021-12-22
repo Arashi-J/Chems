@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validRole = exports.existingEmail = void 0;
+exports.validArea = exports.validRole = exports.existingArea = exports.existingEmail = void 0;
+const area_1 = require("../models/area");
 const role_1 = require("../models/role");
 const user_1 = require("../models/user");
 const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
@@ -19,6 +20,13 @@ const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.existingEmail = existingEmail;
+const existingArea = (area) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingArea = yield area_1.AreaModel.findOne({ area });
+    if (!existingArea) {
+        throw new Error(`El área ${area} ya existe`);
+    }
+});
+exports.existingArea = existingArea;
 const validRole = (role) => __awaiter(void 0, void 0, void 0, function* () {
     const validRole = yield role_1.RoleModel.findOne({ role });
     if (!validRole) {
@@ -26,4 +34,13 @@ const validRole = (role) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.validRole = validRole;
+const validArea = (areas) => {
+    areas.forEach((area) => __awaiter(void 0, void 0, void 0, function* () {
+        const validArea = yield area_1.AreaModel.findOne({ area });
+        if (!validArea) {
+            throw new Error(`El área ${area} no existe en el catalogo`);
+        }
+    }));
+};
+exports.validArea = validArea;
 //# sourceMappingURL=db-validators.js.map

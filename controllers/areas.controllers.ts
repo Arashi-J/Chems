@@ -11,14 +11,13 @@ export const getAreas = async(req: Request, res: Response) => {
 
 export const createArea = async(req: Request, res: Response) => {
     
-    const {name} = req.body;
+    const {area, chemicals} = req.body;
     
-    const area = new AreaModel({name});
+    const newArea = new AreaModel({area, chemicals});
 
-    area.save();
+    newArea.save();
     
     res.status(201).json({
-        ok: true,
         area
     });
 }
