@@ -72,7 +72,7 @@ exports.createUser = createUser;
 //Update User
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const _a = req.body, { _id, password } = _a, newUserData = __rest(_a, ["_id", "password"]);
+    const _a = req.body, { _id, password, __v } = _a, newUserData = __rest(_a, ["_id", "password", "__v"]);
     if (password) {
         const salt = bcryptjs_1.default.genSaltSync();
         newUserData.password = bcryptjs_1.default.hashSync(password, salt);

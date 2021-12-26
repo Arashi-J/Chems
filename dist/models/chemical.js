@@ -3,13 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChemicalModel = void 0;
 const mongoose_1 = require("mongoose");
 const ChemicalSchema = new mongoose_1.Schema({
-    name: {
+    chemical: {
         type: String,
         required: [true, "El nombre de la sustancia química es obligatorio"]
     },
     hazards: {
         type: [mongoose_1.Schema.Types.ObjectId],
         ref: 'Hazard'
+    },
+    providers: {
+        type: [String]
+    },
+    manufacturers: {
+        type: [String]
     },
     pPhrases: {
         type: Array

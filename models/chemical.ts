@@ -2,13 +2,19 @@ import { Schema, model } from "mongoose";
 import { Chemical } from "../interfaces/interfaces";
 
 const ChemicalSchema = new Schema<Chemical>({
-    name: {
+    chemical: {
         type: String,
         required: [true, "El nombre de la sustancia química es obligatorio"]
     },
     hazards: {
         type: [Schema.Types.ObjectId],
         ref: 'Hazard'
+    },
+    providers:{
+        type: [String]
+    },
+    manufacturers:{
+        type: [String]
     },
     pPhrases: {
         type: Array

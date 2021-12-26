@@ -13,7 +13,7 @@ export const getUsers = async (req: Request, res: Response) => {
     const users = await UserModel.find(query)
         .skip(Number(searchFrom))
         .limit(Number(resultsLimit))
-        .populate('areas', 'area',);
+        .populate('areas', 'area');
 
     const totalUsers = await UserModel.countDocuments(query);
     
@@ -65,7 +65,7 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
 
     const { id } = req.params;
-    const {_id, password, ...newUserData} = req.body;
+    const {_id, password, __v, ...newUserData} = req.body;
 
     if(password){
         const salt = bcryptjs.genSaltSync();

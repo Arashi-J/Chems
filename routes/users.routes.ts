@@ -14,6 +14,7 @@ router.get('/', getUsers);
 //Look for user by id
 router.get('/:id', [
     check('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
+    check('id').custom(existingUserId),
     requestValidator
 ], getUser)
 
@@ -24,15 +25,15 @@ router.post('/', [
     check('email', 'El correo no es válido').isEmail(),
     check('email').custom(existingEmail),
     check('role').custom(validRole),
-    check('status', "el estado debe ser un booleano").isBoolean(),
-    check('areas', 'Uno o más valores inválidos').custom(validAreas),
+    check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
+    check('areas').custom(validAreas).optional({ nullable: true }),
     requestValidator
 ], createUser);
 
 //Update User
 router.put('/:id', [
     check('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
-    check('id', 'Usuario no encontrado').custom(existingUserId),
+    check('id').custom(existingUserId),
     check('name', 'El nombre no puede estar vacío').notEmpty().optional({ nullable: true }),
     check('email', 'El correo no es válido').isEmail().optional({ nullable: true }),
     check('email').custom(existingEmail),

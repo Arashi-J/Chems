@@ -1,10 +1,18 @@
 import { AreaModel } from '../models/area';
 import { RoleModel } from '../models/role';
 import { UserModel } from '../models/user';
+import { ChemicalModel } from '../models/chemical';
 
 export const existingUserId = async (id: string) => {
     const existingUser = await UserModel.findById(id);
     if (!existingUser) {
+        throw new Error(`Èl usuario con id ${ id } no existe`)
+    }
+}
+
+export const existingAreaId = async (id: string) => {
+    const existingArea = await AreaModel.findById(id);
+    if (!existingArea) {
         throw new Error(`Èl usuario con id ${ id } no existe`)
     }
 }
@@ -40,19 +48,32 @@ export const validAreas = async (areas: string[]) => {
     if (areas === []) {
         return
     } else {
-
         for (const areaId of areas) {
 
             if (areaId.length !== 24) {
                 throw new Error(`El valor ${ areaId } no es un id de MongoDB válido`);
             }
-
             const validArea = await AreaModel.findById(areaId);
-
             if (!validArea) {
                 throw new Error(`El área con el id ${ areaId } no existe en el catalogo`);
             }
         }
     }
 
+}
+
+export const validChemicals = async (chemicals: string[]) => {
+    if (chemicals === []) {
+        return
+    } else {
+        for (const chemicalId of chemicals) {
+            if (chemicalId.length !== 24) {
+                throw new Error(`El valor ${ chemicalId } no es un id de MongoDB válido`);
+            }
+            const validChemical = await ChemicalModel.findById(chemicalId)
+            if(!validChemical){
+                throw new Error(`El sustancia química con el id ${ chemicalId } no existe en el catalogo`);
+            }
+        }
+    }
 }

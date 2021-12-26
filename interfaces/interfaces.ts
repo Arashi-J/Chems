@@ -19,8 +19,10 @@ export interface Area {
 }
 
 export interface Chemical {
-    name: string;
-    hazards?: Hazard[]
+    chemical: string;
+    hazards?: Hazard[];
+    providers: string[];
+    manufacturers: string[];
     pPhrases?: Phrase[];
     hPhrases?: Phrase[];
     ppe?: PPE[];
@@ -41,7 +43,7 @@ export interface Phrase {
     code: string;
     description: string;
 }
-export interface PPE{
+export interface PPE {
     ppe: string;
     img: string;
 }

@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validAreas = exports.validRole = exports.existingArea = exports.existingEmail = exports.existingUserId = void 0;
+exports.validChemicals = exports.validAreas = exports.validRole = exports.existingArea = exports.existingEmail = exports.existingAreaId = exports.existingUserId = void 0;
 const area_1 = require("../models/area");
 const role_1 = require("../models/role");
 const user_1 = require("../models/user");
+const chemical_1 = require("../models/chemical");
 const existingUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const existingUser = yield user_1.UserModel.findById(id);
     if (!existingUser) {
@@ -20,6 +21,13 @@ const existingUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.existingUserId = existingUserId;
+const existingAreaId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingArea = yield area_1.AreaModel.findById(id);
+    if (!existingArea) {
+        throw new Error(`Èl usuario con id ${id} no existe`);
+    }
+});
+exports.existingAreaId = existingAreaId;
 const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const existingEmail = yield user_1.UserModel.findOne({ email });
     if (existingEmail) {
@@ -58,4 +66,21 @@ const validAreas = (areas) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.validAreas = validAreas;
+const validChemicals = (chemicals) => __awaiter(void 0, void 0, void 0, function* () {
+    if (chemicals === []) {
+        return;
+    }
+    else {
+        for (const chemicalId of chemicals) {
+            if (chemicalId.length !== 24) {
+                throw new Error(`El valor ${chemicalId} no es un id de MongoDB válido`);
+            }
+            const validChemical = yield chemical_1.ChemicalModel.findById(chemicalId);
+            if (!validChemical) {
+                throw new Error(`El sustancia química con el id ${chemicalId} no existe en el catalogo`);
+            }
+        }
+    }
+});
+exports.validChemicals = validChemicals;
 //# sourceMappingURL=db-validators.js.map
