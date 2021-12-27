@@ -71,7 +71,7 @@ exports.createChemical = createChemical;
 const updateChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const _a = req.body, { _id, __v } = _a, newChemicalData = __rest(_a, ["_id", "__v"]);
-    const chemical = chemical_1.ChemicalModel.findByIdAndUpdate(id, newChemicalData, { new: true });
+    const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, newChemicalData, { new: true });
     return res.status(202).json({
         chemical
     });

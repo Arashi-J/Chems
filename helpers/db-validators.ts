@@ -6,14 +6,21 @@ import { ChemicalModel } from '../models/chemical';
 export const existingUserId = async (id: string) => {
     const existingUser = await UserModel.findById(id);
     if (!existingUser) {
-        throw new Error(`Èl usuario con id ${ id } no existe`)
+        throw new Error(`Èl usuario con id ${ id } no existe`);
     }
 }
 
 export const existingAreaId = async (id: string) => {
     const existingArea = await AreaModel.findById(id);
     if (!existingArea) {
-        throw new Error(`Èl usuario con id ${ id } no existe`)
+        throw new Error(`Èl área con id ${ id } no existe`);
+    }
+}
+
+export const existingChemicalId = async (id: string) => {
+    const existingChemical = await ChemicalModel.findById(id);
+    if (!existingChemical) {
+        throw new Error(`Èl químico con id ${ id } no existe`);
     }
 }
 
@@ -32,6 +39,15 @@ export const existingArea = async (area: string) => {
 
     if (existingArea) {
         throw new Error(`El área ${ area } ya existe`);
+    }
+}
+
+export const existingChemical = async (chemical: string) => {
+
+    const existingChemical = await ChemicalModel.findOne({ chemical });
+
+    if (existingChemical) {
+        throw new Error(`La sustancia química con nombre: ${ chemical } ya existe`);
     }
 }
 

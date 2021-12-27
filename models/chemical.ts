@@ -9,23 +9,29 @@ const ChemicalSchema = new Schema<Chemical>({
     },
     hazards: {
         type: [Schema.Types.ObjectId],
-        ref: 'Hazard'
+        ref: 'Hazard',
+        default: []
     },
     providers: {
-        type: [String]
+        type: [String],
+        default: []
     },
     manufacturers: {
-        type: [String]
+        type: [String],
+        default: []
     },
     pPhrases: {
-        type: Array
+        type: Array,
+        default: []
     },
     hPhrases: {
-        type: Array
+        type: Array,
+        default: []
     },
     ppe: {
         type: [Schema.Types.ObjectId],
-        ref: 'PPE'
+        ref: 'PPE',
+        default: []
     },
     fsms: {
         type: Boolean,

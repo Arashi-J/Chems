@@ -60,6 +60,8 @@ exports.getUser = getUser;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, password, email, role, areas } = req.body;
     const user = new user_1.UserModel({ name, password, email, role, areas });
+    //Email text normalization
+    user.email = user.email.toLowerCase();
     //Password Hash
     const salt = bcryptjs_1.default.genSaltSync();
     user.password = bcryptjs_1.default.hashSync(password, salt);

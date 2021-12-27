@@ -25,7 +25,7 @@ router.post('/', [
 //Update area
 router.put('/:id', [
     (0, express_validator_1.check)('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
-    (0, express_validator_1.check)('id').custom(db_validators_1.existingAreaId).optional({ nullable: true }),
+    (0, express_validator_1.check)('id').custom(db_validators_1.existingAreaId),
     (0, express_validator_1.check)('area').custom(db_validators_1.existingArea).optional({ nullable: true }),
     (0, express_validator_1.check)('chemicals').custom(db_validators_1.validChemicals).optional({ nullable: true }),
     middlewares_1.requestValidator

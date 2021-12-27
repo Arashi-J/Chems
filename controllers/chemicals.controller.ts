@@ -55,11 +55,12 @@ export const createChemical = async (req: Request, res: Response) => {
     });
 
 }
+
 export const updateChemical = async (req: Request, res: Response) => {
     const { id } = req.params;
     const {_id, __v, ...newChemicalData } = req.body;
 
-    const chemical = ChemicalModel.findByIdAndUpdate(id, newChemicalData, {new: true});
+    const chemical = await ChemicalModel.findByIdAndUpdate(id, newChemicalData, {new: true});
 
     return res.status(202).json({
         chemical

@@ -10,23 +10,29 @@ const ChemicalSchema = new mongoose_1.Schema({
     },
     hazards: {
         type: [mongoose_1.Schema.Types.ObjectId],
-        ref: 'Hazard'
+        ref: 'Hazard',
+        default: []
     },
     providers: {
-        type: [String]
+        type: [String],
+        default: []
     },
     manufacturers: {
-        type: [String]
+        type: [String],
+        default: []
     },
     pPhrases: {
-        type: Array
+        type: Array,
+        default: []
     },
     hPhrases: {
-        type: Array
+        type: Array,
+        default: []
     },
     ppe: {
         type: [mongoose_1.Schema.Types.ObjectId],
-        ref: 'PPE'
+        ref: 'PPE',
+        default: []
     },
     fsms: {
         type: Boolean,

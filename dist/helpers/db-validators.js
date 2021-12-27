@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validChemicals = exports.validAreas = exports.validRole = exports.existingArea = exports.existingEmail = exports.existingAreaId = exports.existingUserId = void 0;
+exports.validChemicals = exports.validAreas = exports.validRole = exports.existingChemical = exports.existingArea = exports.existingEmail = exports.existingChemicalId = exports.existingAreaId = exports.existingUserId = void 0;
 const area_1 = require("../models/area");
 const role_1 = require("../models/role");
 const user_1 = require("../models/user");
@@ -24,10 +24,17 @@ exports.existingUserId = existingUserId;
 const existingAreaId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const existingArea = yield area_1.AreaModel.findById(id);
     if (!existingArea) {
-        throw new Error(`Èl usuario con id ${id} no existe`);
+        throw new Error(`Èl área con id ${id} no existe`);
     }
 });
 exports.existingAreaId = existingAreaId;
+const existingChemicalId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingChemical = yield chemical_1.ChemicalModel.findById(id);
+    if (!existingChemical) {
+        throw new Error(`Èl químico con id ${id} no existe`);
+    }
+});
+exports.existingChemicalId = existingChemicalId;
 const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const existingEmail = yield user_1.UserModel.findOne({ email });
     if (existingEmail) {
@@ -42,6 +49,13 @@ const existingArea = (area) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.existingArea = existingArea;
+const existingChemical = (chemical) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingChemical = yield chemical_1.ChemicalModel.findOne({ chemical });
+    if (existingChemical) {
+        throw new Error(`La sustancia química con nombre: ${chemical} ya existe`);
+    }
+});
+exports.existingChemical = existingChemical;
 const validRole = (role) => __awaiter(void 0, void 0, void 0, function* () {
     const validRole = yield role_1.RoleModel.findOne({ role });
     if (!validRole) {

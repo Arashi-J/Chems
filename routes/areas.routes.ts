@@ -34,7 +34,7 @@ router.post('/', [
 //Update area
 router.put('/:id', [
     check('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
-    check('id').custom(existingAreaId).optional({ nullable: true }),
+    check('id').custom(existingAreaId),
     check('area').custom(existingArea).optional({ nullable: true }),
     check('chemicals').custom(validChemicals).optional({ nullable: true }),
     requestValidator

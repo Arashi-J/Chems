@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../models/user';
 import bcryptjs from 'bcryptjs';
+import { textNormalizer } from '../helpers/text-normalizer';
 
 //List Users
 export const getUsers = async (req: Request, res: Response) => {
@@ -47,6 +48,9 @@ export const createUser = async (req: Request, res: Response) => {
     const { name, password, email, role, areas } = req.body;
 
     const user = new UserModel({ name, password, email, role, areas });
+
+    //Email text normalization
+    user.email = user.email.toLowerCase();
 
     //Password Hash
     const salt = bcryptjs.genSaltSync();
