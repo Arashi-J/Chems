@@ -7,7 +7,7 @@ export const getAreas = async (req: Request, res: Response) => {
 
     const { resultsLimit = 10, searchFrom = 0, areaStatus = 'all' } = req.query;
 
-    let query = areaStatus === 'active' ? { status: true } :
+    const query = areaStatus === 'active' ? { status: true } :
         areaStatus === 'inactive' ? { status: false } : {}
 
     const areas = await AreaModel.find(query)
@@ -48,7 +48,7 @@ export const createArea = async (req: Request, res: Response) => {
     await newArea.save();
 
     return res.status(201).json({
-        area
+        newArea
     });
 }
 
@@ -56,14 +56,10 @@ export const createArea = async (req: Request, res: Response) => {
 
 export const updateArea = async (req: Request, res: Response) => {
 
-    //TODO: when you inactivate an area, dont show it in users response, do it with chems in areas response
-
-
     const { id } = req.params;
-    const { _id,__v, ...newAreaData } = req.body;
+    const { _id, __v, ...newAreaData } = req.body;
 
-    const area = await AreaModel.findByIdAndUpdate(id,  newAreaData , { new: true })
-
+    const area = await AreaModel.findByIdAndUpdate(id, newAreaData, { new: true })
 
     return res.status(202).json({
         area

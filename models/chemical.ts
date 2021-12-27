@@ -4,16 +4,17 @@ import { Chemical } from "../interfaces/interfaces";
 const ChemicalSchema = new Schema<Chemical>({
     chemical: {
         type: String,
-        required: [true, "El nombre de la sustancia química es obligatorio"]
+        required: [true, "El nombre de la sustancia química es obligatorio"],
+        unique: true
     },
     hazards: {
         type: [Schema.Types.ObjectId],
         ref: 'Hazard'
     },
-    providers:{
+    providers: {
         type: [String]
     },
-    manufacturers:{
+    manufacturers: {
         type: [String]
     },
     pPhrases: {

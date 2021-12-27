@@ -18,11 +18,13 @@ const express_1 = __importDefault(require("express"));
 const config_db_1 = require("../database/config.db");
 const users_routes_1 = __importDefault(require("../routes/users.routes"));
 const areas_routes_1 = __importDefault(require("../routes/areas.routes"));
+const chemicals_routes_1 = __importDefault(require("../routes/chemicals.routes"));
 class Server {
     constructor() {
         this.apiPaths = {
             users: '/api/users',
-            areas: '/api/areas'
+            areas: '/api/areas',
+            chemicals: '/api/chemicals'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8090';
@@ -47,6 +49,7 @@ class Server {
     routes() {
         this.app.use(this.apiPaths.users, users_routes_1.default);
         this.app.use(this.apiPaths.areas, areas_routes_1.default);
+        this.app.use(this.apiPaths.chemicals, chemicals_routes_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

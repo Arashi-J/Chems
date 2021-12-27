@@ -10,4 +10,5 @@ const server_1 = __importDefault(require("./models/server"));
 //server init
 const server = new server_1.default();
 server.listen();
+//TODO: when you inactivate an area, dont show it in users response, do it with chems in areas response
 //# sourceMappingURL=index.js.map

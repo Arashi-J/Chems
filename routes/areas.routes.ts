@@ -38,7 +38,6 @@ router.put('/:id', [
     check('area').custom(existingArea).optional({ nullable: true }),
     check('chemicals').custom(validChemicals).optional({ nullable: true }),
     requestValidator
-], updateArea)
-
+], updateArea);
 
 export default router;

@@ -29,7 +29,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 //List Users
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultsLimit = 10, searchFrom = 0, userStatus = 'all' } = req.query;
-    let query = userStatus === 'active' ? { status: true } :
+    const query = userStatus === 'active' ? { status: true } :
         userStatus === 'inactive' ? { status: false } : {};
     const users = yield user_1.UserModel.find(query)
         .skip(Number(searchFrom))

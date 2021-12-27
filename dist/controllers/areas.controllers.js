@@ -25,7 +25,7 @@ const area_1 = require("../models/area");
 //List areas
 const getAreas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultsLimit = 10, searchFrom = 0, areaStatus = 'all' } = req.query;
-    let query = areaStatus === 'active' ? { status: true } :
+    const query = areaStatus === 'active' ? { status: true } :
         areaStatus === 'inactive' ? { status: false } : {};
     const areas = yield area_1.AreaModel.find(query)
         .skip(Number(searchFrom))
@@ -59,13 +59,12 @@ const createArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const newArea = new area_1.AreaModel({ area, chemicals });
     yield newArea.save();
     return res.status(201).json({
-        area
+        newArea
     });
 });
 exports.createArea = createArea;
 //Update area
 const updateArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //TODO: when you inactivate an area, dont show it in users response, do it with chems in areas response
     const { id } = req.params;
     const _a = req.body, { _id, __v } = _a, newAreaData = __rest(_a, ["_id", "__v"]);
     const area = yield area_1.AreaModel.findByIdAndUpdate(id, newAreaData, { new: true });

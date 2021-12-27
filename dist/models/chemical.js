@@ -5,7 +5,8 @@ const mongoose_1 = require("mongoose");
 const ChemicalSchema = new mongoose_1.Schema({
     chemical: {
         type: String,
-        required: [true, "El nombre de la sustancia química es obligatorio"]
+        required: [true, "El nombre de la sustancia química es obligatorio"],
+        unique: true
     },
     hazards: {
         type: [mongoose_1.Schema.Types.ObjectId],

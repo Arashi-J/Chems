@@ -5,13 +5,15 @@ import { dbConnection } from "../database/config.db";
 
 import usersRoutes from '../routes/users.routes';
 import areasRoutes from '../routes/areas.routes';
+import chemicalRoutes from '../routes/chemicals.routes';
 
 export class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
         users: '/api/users',
-        areas: '/api/areas'
+        areas: '/api/areas',
+        chemicals: '/api/chemicals'
     }
 
     constructor() {
@@ -42,8 +44,9 @@ export class Server {
     }
 
     routes(){
-        this.app.use(this.apiPaths.users, usersRoutes)
-        this.app.use(this.apiPaths.areas, areasRoutes)
+        this.app.use(this.apiPaths.users, usersRoutes);
+        this.app.use(this.apiPaths.areas, areasRoutes);
+        this.app.use(this.apiPaths.chemicals, chemicalRoutes);
     }
 
     listen() {

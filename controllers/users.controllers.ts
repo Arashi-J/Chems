@@ -7,7 +7,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
     const { resultsLimit = 10, searchFrom = 0, userStatus = 'all' } = req.query;
 
-    let query = userStatus === 'active' ? { status: true } :
+    const query = userStatus === 'active' ? { status: true } :
                 userStatus === 'inactive' ? { status: false } : {}
 
     const users = await UserModel.find(query)
@@ -21,7 +21,6 @@ export const getUsers = async (req: Request, res: Response) => {
         users,
         totalUsers
     });
-
 }
 
 //Look for user by id
