@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { PPE } from "../interfaces/interfaces";
+import { Ppe } from "../interfaces/interfaces";
 
-const ppeSchema = new Schema<PPE>({
+const PpeSchema = new Schema<Ppe>({
     ppe: {
         type: String,
         required: [true, 'El nombre del EPP es obligatorio'],
@@ -13,4 +13,4 @@ const ppeSchema = new Schema<PPE>({
     }
 });
 
-export const ppeModel = model<PPE>('PPE', ppeSchema);
+export const PpeModel = model<Ppe>('Ppe', PpeSchema);

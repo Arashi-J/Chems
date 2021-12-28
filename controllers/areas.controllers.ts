@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { AreaModel } from '../models/area';
+import { textNormalizer } from '../helpers/text-normalizer';
 
 
 //List areas
@@ -13,7 +14,7 @@ export const getAreas = async (req: Request, res: Response) => {
     const areas = await AreaModel.find(query)
         .skip(Number(searchFrom))
         .limit(Number(resultsLimit))
-    // .populate('chemicals', 'chemical');
+        .populate('chemicals', 'chemical');
 
     const totalAreas = await AreaModel.countDocuments(query);
 
@@ -27,7 +28,8 @@ export const getArea = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const area = await AreaModel.findById(id)
-    // .populate('chemicals', 'chemical');
+        .populate('chemicals', 'chemical');
+        
     if (area) {
         return res.status(200).json({
             area
@@ -45,6 +47,9 @@ export const createArea = async (req: Request, res: Response) => {
 
     const newArea = new AreaModel({ area, chemicals });
 
+    //Area name normalization
+    newArea.area = textNormalizer(newArea.area);
+
     await newArea.save();
 
     return res.status(201).json({
@@ -58,6 +63,12 @@ export const updateArea = async (req: Request, res: Response) => {
 
     const { id } = req.params;
     const { _id, __v, ...newAreaData } = req.body;
+
+    //Area name normalization
+    if (newAreaData.area) {
+        newAreaData.area = textNormalizer(newAreaData.area);
+    }
+
 
     const area = await AreaModel.findByIdAndUpdate(id, newAreaData, { new: true })
 

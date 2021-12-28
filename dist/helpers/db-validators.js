@@ -9,11 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validChemicals = exports.validAreas = exports.validRole = exports.existingChemical = exports.existingArea = exports.existingEmail = exports.existingChemicalId = exports.existingAreaId = exports.existingUserId = void 0;
+exports.validPpes = exports.validHazards = exports.validChemicals = exports.validAreas = exports.validRole = exports.existingChemical = exports.existingArea = exports.existingEmail = exports.existingChemicalId = exports.existingAreaId = exports.existingUserId = void 0;
 const area_1 = require("../models/area");
 const role_1 = require("../models/role");
 const user_1 = require("../models/user");
 const chemical_1 = require("../models/chemical");
+const text_normalizer_1 = require("./text-normalizer");
+const hazard_1 = require("../models/hazard");
+const ppe_1 = require("../models/ppe");
 const existingUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const existingUser = yield user_1.UserModel.findById(id);
     if (!existingUser) {
@@ -36,6 +39,7 @@ const existingChemicalId = (id) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.existingChemicalId = existingChemicalId;
 const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    email = email.toLowerCase();
     const existingEmail = yield user_1.UserModel.findOne({ email });
     if (existingEmail) {
         throw new Error(`El correo electrónico ${email} ya se encuentra en uso`);
@@ -43,6 +47,7 @@ const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.existingEmail = existingEmail;
 const existingArea = (area) => __awaiter(void 0, void 0, void 0, function* () {
+    area = (0, text_normalizer_1.textNormalizer)(area);
     const existingArea = yield area_1.AreaModel.findOne({ area });
     if (existingArea) {
         throw new Error(`El área ${area} ya existe`);
@@ -50,6 +55,7 @@ const existingArea = (area) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.existingArea = existingArea;
 const existingChemical = (chemical) => __awaiter(void 0, void 0, void 0, function* () {
+    chemical = (0, text_normalizer_1.textNormalizer)(chemical);
     const existingChemical = yield chemical_1.ChemicalModel.findOne({ chemical });
     if (existingChemical) {
         throw new Error(`La sustancia química con nombre: ${chemical} ya existe`);
@@ -80,7 +86,7 @@ const validAreas = (areas) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.validAreas = validAreas;
-const validChemicals = (chemicals) => __awaiter(void 0, void 0, void 0, function* () {
+const validChemicals = (chemicals = []) => __awaiter(void 0, void 0, void 0, function* () {
     if (chemicals === []) {
         return;
     }
@@ -97,4 +103,38 @@ const validChemicals = (chemicals) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.validChemicals = validChemicals;
+const validHazards = (hazards = []) => __awaiter(void 0, void 0, void 0, function* () {
+    if (hazards === []) {
+        return;
+    }
+    else {
+        for (const hazardId of hazards) {
+            if (hazardId.length !== 24) {
+                throw new Error(`El valor ${hazardId} no es un id de MongoDB válido`);
+            }
+            const validChemical = yield hazard_1.HazardModel.findById(hazardId);
+            if (!validChemical) {
+                throw new Error(`El peligro con el id ${hazardId} no existe en el catalogo`);
+            }
+        }
+    }
+});
+exports.validHazards = validHazards;
+const validPpes = (ppes = []) => __awaiter(void 0, void 0, void 0, function* () {
+    if (ppes === []) {
+        return;
+    }
+    else {
+        for (const ppedId of ppes) {
+            if (ppedId.length !== 24) {
+                throw new Error(`El valor ${ppedId} no es un id de MongoDB válido`);
+            }
+            const validChemical = yield ppe_1.PpeModel.findById(ppedId);
+            if (!validChemical) {
+                throw new Error(`El EPP con el id ${ppedId} no existe en el catalogo`);
+            }
+        }
+    }
+});
+exports.validPpes = validPpes;
 //# sourceMappingURL=db-validators.js.map

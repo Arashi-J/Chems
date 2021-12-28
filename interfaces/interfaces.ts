@@ -25,7 +25,7 @@ export interface Chemical {
     manufacturers: string[];
     pPhrases?: Phrase[];
     hPhrases?: Phrase[];
-    ppe?: PPE[];
+    ppes?: Ppe[];
     fsms: boolean;
     ems: boolean;
     oshms: boolean;
@@ -43,7 +43,7 @@ export interface Phrase {
     code: string;
     description: string;
 }
-export interface PPE {
+export interface Ppe {
     ppe: string;
     img: string;
 }

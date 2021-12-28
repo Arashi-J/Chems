@@ -28,6 +28,7 @@ router.post('/', [
     check('area').custom(existingArea),
     check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
     check('chemicals').custom(validChemicals),
+
     requestValidator
 ], createArea);
 
@@ -36,6 +37,7 @@ router.put('/:id', [
     check('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
     check('id').custom(existingAreaId),
     check('area').custom(existingArea).optional({ nullable: true }),
+    check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
     check('chemicals').custom(validChemicals).optional({ nullable: true }),
     requestValidator
 ], updateArea);

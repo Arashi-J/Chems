@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChemicalModel = void 0;
 const mongoose_1 = require("mongoose");
+const hazard_1 = require("./hazard");
+const ppe_1 = require("./ppe");
 const ChemicalSchema = new mongoose_1.Schema({
     chemical: {
         type: String,
@@ -10,7 +12,7 @@ const ChemicalSchema = new mongoose_1.Schema({
     },
     hazards: {
         type: [mongoose_1.Schema.Types.ObjectId],
-        ref: 'Hazard',
+        ref: hazard_1.HazardModel,
         default: []
     },
     providers: {
@@ -29,9 +31,9 @@ const ChemicalSchema = new mongoose_1.Schema({
         type: Array,
         default: []
     },
-    ppe: {
+    ppes: {
         type: [mongoose_1.Schema.Types.ObjectId],
-        ref: 'PPE',
+        ref: ppe_1.PpeModel,
         default: []
     },
     fsms: {

@@ -1,5 +1,7 @@
 import { Schema, model } from "mongoose";
 import { Chemical } from "../interfaces/interfaces";
+import { HazardModel } from "./hazard";
+import { PpeModel } from "./ppe";
 
 const ChemicalSchema = new Schema<Chemical>({
     chemical: {
@@ -9,7 +11,7 @@ const ChemicalSchema = new Schema<Chemical>({
     },
     hazards: {
         type: [Schema.Types.ObjectId],
-        ref: 'Hazard',
+        ref: HazardModel,
         default: []
     },
     providers: {
@@ -28,9 +30,9 @@ const ChemicalSchema = new Schema<Chemical>({
         type: Array,
         default: []
     },
-    ppe: {
+    ppes: {
         type: [Schema.Types.ObjectId],
-        ref: 'PPE',
+        ref: PpeModel,
         default: []
     },
     fsms: {

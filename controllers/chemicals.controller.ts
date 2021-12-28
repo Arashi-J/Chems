@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { ChemicalModel } from '../models/chemical';
+import { textNormalizer } from '../helpers/text-normalizer';
 
 export const getChemicals = async (req: Request, res: Response) => {
     const { resultsLimit = 10, searchFrom = 0, chemicalStatus = 'all' } = req.query;
@@ -23,7 +24,9 @@ export const getChemicals = async (req: Request, res: Response) => {
 export const getChemical = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const chemical = await ChemicalModel.findById(id);
+    const chemical = await ChemicalModel.findById(id)
+        .populate('hazards', 'hazard')
+        .populate('ppes', 'ppe');
 
     if (chemical) {
         return res.status(200).json({
@@ -36,7 +39,7 @@ export const getChemical = async (req: Request, res: Response) => {
     })
 }
 export const createChemical = async (req: Request, res: Response) => {
-    const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppe } = req.body;
+    const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppes } = req.body;
 
     const newChemical = new ChemicalModel({
         chemical,
@@ -45,8 +48,10 @@ export const createChemical = async (req: Request, res: Response) => {
         manufacturers,
         pPhrases,
         hPhrases,
-        ppe
+        ppes
     });
+
+    newChemical.chemical = textNormalizer(newChemical.chemical);
 
     newChemical.save();
 
@@ -58,9 +63,13 @@ export const createChemical = async (req: Request, res: Response) => {
 
 export const updateChemical = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const {_id, __v, ...newChemicalData } = req.body;
+    const { _id, __v, ...newChemicalData } = req.body;
 
-    const chemical = await ChemicalModel.findByIdAndUpdate(id, newChemicalData, {new: true});
+    if (newChemicalData.chemical) {
+        newChemicalData.chemical = textNormalizer(newChemicalData.chemical);
+    }
+
+    const chemical = await ChemicalModel.findByIdAndUpdate(id, newChemicalData, { new: true });
 
     return res.status(202).json({
         chemical

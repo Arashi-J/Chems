@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../models/user';
 import bcryptjs from 'bcryptjs';
-import { textNormalizer } from '../helpers/text-normalizer';
+
 
 //List Users
 export const getUsers = async (req: Request, res: Response) => {

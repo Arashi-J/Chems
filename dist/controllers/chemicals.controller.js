@@ -22,6 +22,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateChemical = exports.createChemical = exports.getChemical = exports.getChemicals = void 0;
 const chemical_1 = require("../models/chemical");
+const text_normalizer_1 = require("../helpers/text-normalizer");
 const getChemicals = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultsLimit = 10, searchFrom = 0, chemicalStatus = 'all' } = req.query;
     const query = chemicalStatus === 'active' ? { status: true } :
@@ -40,7 +41,9 @@ const getChemicals = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.getChemicals = getChemicals;
 const getChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const chemical = yield chemical_1.ChemicalModel.findById(id);
+    const chemical = yield chemical_1.ChemicalModel.findById(id)
+        .populate('hazards', 'hazard')
+        .populate('ppes', 'ppe');
     if (chemical) {
         return res.status(200).json({
             chemical
@@ -52,7 +55,7 @@ const getChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getChemical = getChemical;
 const createChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppe } = req.body;
+    const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppes } = req.body;
     const newChemical = new chemical_1.ChemicalModel({
         chemical,
         hazards,
@@ -60,8 +63,9 @@ const createChemical = (req, res) => __awaiter(void 0, void 0, void 0, function*
         manufacturers,
         pPhrases,
         hPhrases,
-        ppe
+        ppes
     });
+    newChemical.chemical = (0, text_normalizer_1.textNormalizer)(newChemical.chemical);
     newChemical.save();
     return res.status(201).json({
         newChemical
@@ -71,6 +75,9 @@ exports.createChemical = createChemical;
 const updateChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const _a = req.body, { _id, __v } = _a, newChemicalData = __rest(_a, ["_id", "__v"]);
+    if (newChemicalData.chemical) {
+        newChemicalData.chemical = (0, text_normalizer_1.textNormalizer)(newChemicalData.chemical);
+    }
     const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, newChemicalData, { new: true });
     return res.status(202).json({
         chemical

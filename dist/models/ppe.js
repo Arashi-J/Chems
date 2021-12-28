@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ppeModel = void 0;
+exports.PpeModel = void 0;
 const mongoose_1 = require("mongoose");
-const ppeSchema = new mongoose_1.Schema({
+const PpeSchema = new mongoose_1.Schema({
     ppe: {
         type: String,
         required: [true, 'El nombre del EPP es obligatorio'],
@@ -13,5 +13,5 @@ const ppeSchema = new mongoose_1.Schema({
         default: ''
     }
 });
-exports.ppeModel = (0, mongoose_1.model)('PPE', ppeSchema);
+exports.PpeModel = (0, mongoose_1.model)('Ppe', PpeSchema);
 //# sourceMappingURL=ppe.js.map

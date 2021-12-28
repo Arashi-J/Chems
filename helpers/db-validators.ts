@@ -2,6 +2,9 @@ import { AreaModel } from '../models/area';
 import { RoleModel } from '../models/role';
 import { UserModel } from '../models/user';
 import { ChemicalModel } from '../models/chemical';
+import { textNormalizer } from './text-normalizer';
+import { HazardModel } from '../models/hazard';
+import { PpeModel } from '../models/ppe';
 
 export const existingUserId = async (id: string) => {
     const existingUser = await UserModel.findById(id);
@@ -26,6 +29,8 @@ export const existingChemicalId = async (id: string) => {
 
 export const existingEmail = async (email: string) => {
 
+    email = email.toLowerCase();
+
     const existingEmail = await UserModel.findOne({ email });
 
     if (existingEmail) {
@@ -35,6 +40,8 @@ export const existingEmail = async (email: string) => {
 
 export const existingArea = async (area: string) => {
 
+    area = textNormalizer(area);
+
     const existingArea = await AreaModel.findOne({ area });
 
     if (existingArea) {
@@ -43,6 +50,8 @@ export const existingArea = async (area: string) => {
 }
 
 export const existingChemical = async (chemical: string) => {
+
+    chemical = textNormalizer(chemical);
 
     const existingChemical = await ChemicalModel.findOne({ chemical });
 
@@ -78,7 +87,7 @@ export const validAreas = async (areas: string[]) => {
 
 }
 
-export const validChemicals = async (chemicals: string[]) => {
+export const validChemicals = async (chemicals: string[] = []) => {
     if (chemicals === []) {
         return
     } else {
@@ -86,9 +95,41 @@ export const validChemicals = async (chemicals: string[]) => {
             if (chemicalId.length !== 24) {
                 throw new Error(`El valor ${ chemicalId } no es un id de MongoDB válido`);
             }
-            const validChemical = await ChemicalModel.findById(chemicalId)
+            const validChemical = await ChemicalModel.findById(chemicalId);
             if(!validChemical){
                 throw new Error(`El sustancia química con el id ${ chemicalId } no existe en el catalogo`);
+            }
+        }
+    }
+}
+
+export const validHazards = async (hazards: string[] = []) => {
+    if (hazards === []) {
+        return
+    } else {
+        for (const hazardId of hazards) {
+            if (hazardId.length !== 24) {
+                throw new Error(`El valor ${ hazardId } no es un id de MongoDB válido`);
+            }
+            const validChemical = await HazardModel.findById(hazardId);
+            if(!validChemical){
+                throw new Error(`El peligro con el id ${ hazardId } no existe en el catalogo`);
+            }
+        }
+    }
+}
+
+export const validPpes = async (ppes: string[] = []) => {
+    if (ppes === []) {
+        return
+    } else {
+        for (const ppedId of ppes) {
+            if (ppedId.length !== 24) {
+                throw new Error(`El valor ${ ppedId } no es un id de MongoDB válido`);
+            }
+            const validChemical = await PpeModel.findById(ppedId);
+            if(!validChemical){
+                throw new Error(`El EPP con el id ${ ppedId } no existe en el catalogo`);
             }
         }
     }
