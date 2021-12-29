@@ -5,7 +5,8 @@ const AreaSchema = new Schema<Area>({
     area: {
         type: String,
         required: [true, 'El nombre del área es obligatorio'],
-        unique: true
+        unique: true,
+        lowercase: true
     },
     status: {
         type: Boolean,

@@ -8,29 +8,27 @@ const ChemicalSchema = new mongoose_1.Schema({
     chemical: {
         type: String,
         required: [true, "El nombre de la sustancia química es obligatorio"],
-        unique: true
+        unique: true,
+        lowercase: true
     },
     hazards: {
         type: [mongoose_1.Schema.Types.ObjectId],
         ref: hazard_1.HazardModel,
-        default: []
     },
     providers: {
         type: [String],
-        default: []
     },
     manufacturers: {
         type: [String],
-        default: []
     },
-    pPhrases: {
-        type: Array,
-        default: []
-    },
-    hPhrases: {
-        type: Array,
-        default: []
-    },
+    pPhrases: [{
+            code: String,
+            description: String,
+        }],
+    hPhrases: [{
+            code: String,
+            description: String
+        }],
     ppes: {
         type: [mongoose_1.Schema.Types.ObjectId],
         ref: ppe_1.PpeModel,

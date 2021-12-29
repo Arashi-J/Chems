@@ -7,29 +7,27 @@ const ChemicalSchema = new Schema<Chemical>({
     chemical: {
         type: String,
         required: [true, "El nombre de la sustancia química es obligatorio"],
-        unique: true
+        unique: true,
+        lowercase: true
     },
     hazards: {
         type: [Schema.Types.ObjectId],
         ref: HazardModel,
-        default: []
     },
     providers: {
         type: [String],
-        default: []
     },
     manufacturers: {
         type: [String],
-        default: []
     },
-    pPhrases: {
-        type: Array,
-        default: []
-    },
-    hPhrases: {
-        type: Array,
-        default: []
-    },
+    pPhrases: [{
+        code: String,
+        description: String,
+    }],
+    hPhrases: [{
+        code: String,
+        description: String
+    }],
     ppes: {
         type: [Schema.Types.ObjectId],
         ref: PpeModel,

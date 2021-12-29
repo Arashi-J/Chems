@@ -13,7 +13,8 @@ const UserSchema = new Schema<User>({
     email: {
         type: String,
         required: [true, "El correo es obligatorio"],
-        unique: true
+        unique: true,
+        lowercase: true
     },
     role: {
         type: String,
