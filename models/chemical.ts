@@ -44,6 +44,10 @@ const ChemicalSchema = new Schema<Chemical>({
     oshms: {
         type: Boolean,
         default: false
+    },
+    status: {
+        type: Boolean,
+        default: true
     }
 });
 

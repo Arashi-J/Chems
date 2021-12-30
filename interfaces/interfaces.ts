@@ -21,14 +21,15 @@ export interface Area {
 export interface Chemical {
     chemical: string;
     hazards?: Hazard[];
-    providers: string[];
-    manufacturers: string[];
+    providers?: string[];
+    manufacturers?: string[];
     pPhrases?: Phrase[];
     hPhrases?: Phrase[];
     ppes?: Ppe[];
     fsms: boolean;
     ems: boolean;
     oshms: boolean;
+    status: boolean;
 }
 
 export interface Hazard {

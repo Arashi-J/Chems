@@ -45,6 +45,10 @@ const ChemicalSchema = new mongoose_1.Schema({
     oshms: {
         type: Boolean,
         default: false
+    },
+    status: {
+        type: Boolean,
+        default: true
     }
 });
 exports.ChemicalModel = (0, mongoose_1.model)('Chemical', ChemicalSchema);
