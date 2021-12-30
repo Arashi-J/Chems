@@ -16,15 +16,17 @@ exports.Server = void 0;
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const config_db_1 = require("../database/config.db");
-const users_routes_1 = __importDefault(require("../routes/users.routes"));
 const areas_routes_1 = __importDefault(require("../routes/areas.routes"));
+const auth_routes_1 = __importDefault(require("../routes/auth.routes"));
 const chemicals_routes_1 = __importDefault(require("../routes/chemicals.routes"));
+const users_routes_1 = __importDefault(require("../routes/users.routes"));
 class Server {
     constructor() {
         this.apiPaths = {
-            users: '/api/users',
             areas: '/api/areas',
-            chemicals: '/api/chemicals'
+            auth: '/api/auth',
+            chemicals: '/api/chemicals',
+            users: '/api/users'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8090';
@@ -47,9 +49,10 @@ class Server {
         this.app.use(express_1.default.static('public'));
     }
     routes() {
-        this.app.use(this.apiPaths.users, users_routes_1.default);
         this.app.use(this.apiPaths.areas, areas_routes_1.default);
+        this.app.use(this.apiPaths.auth, auth_routes_1.default);
         this.app.use(this.apiPaths.chemicals, chemicals_routes_1.default);
+        this.app.use(this.apiPaths.users, users_routes_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

@@ -3,17 +3,19 @@ import express, { Application } from "express";
 
 import { dbConnection } from "../database/config.db";
 
-import usersRoutes from '../routes/users.routes';
 import areasRoutes from '../routes/areas.routes';
+import authRoutes from '../routes/auth.routes';
 import chemicalRoutes from '../routes/chemicals.routes';
+import usersRoutes from '../routes/users.routes';
 
 export class Server {
     private app: Application;
     private port: string;
     private apiPaths = {
-        users: '/api/users',
         areas: '/api/areas',
-        chemicals: '/api/chemicals'
+        auth: '/api/auth',
+        chemicals: '/api/chemicals',
+        users: '/api/users'
     }
 
     constructor() {
@@ -44,9 +46,10 @@ export class Server {
     }
 
     routes(){
-        this.app.use(this.apiPaths.users, usersRoutes);
         this.app.use(this.apiPaths.areas, areasRoutes);
+        this.app.use(this.apiPaths.auth, authRoutes);
         this.app.use(this.apiPaths.chemicals, chemicalRoutes);
+        this.app.use(this.apiPaths.users, usersRoutes);
     }
 
     listen() {
