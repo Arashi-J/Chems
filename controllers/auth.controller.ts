@@ -12,13 +12,13 @@ export const login = async (req: Request, res: Response) => {
         const user = await UserModel.findOne({ email });
         if (!user || user.status === false) {
             return res.status(400).json({
-                msg: 'Usuario y/o contraseña inválidos'
+                msg: 'Correo y/o contraseña inválidos'
             });
         }
         const validPassword = bcryptjs.compareSync(password, user.password);
         if (!validPassword) {
             return res.status(400).json({
-                msg: 'Usuario y/o contraseña inválidos'
+                msg: 'Correo y/o contraseña inválidos'
             });
         }
         const token = await jwtGenerator(user._id);

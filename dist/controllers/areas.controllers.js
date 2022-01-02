@@ -20,7 +20,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateArea = exports.createArea = exports.getArea = exports.getAreas = void 0;
+exports.updateAreaChemicals = exports.updateArea = exports.createArea = exports.getArea = exports.getAreas = void 0;
 const area_1 = require("../models/area");
 const text_normalizer_1 = require("../helpers/text-normalizer");
 //List areas
@@ -80,4 +80,14 @@ const updateArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
 });
 exports.updateArea = updateArea;
+//Update area's chemicals
+const updateAreaChemicals = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { chemicals } = req.body;
+    const area = yield area_1.AreaModel.findByIdAndUpdate(id, { chemicals }, { new: true });
+    return res.status(202).json({
+        area
+    });
+});
+exports.updateAreaChemicals = updateAreaChemicals;
 //# sourceMappingURL=areas.controllers.js.map

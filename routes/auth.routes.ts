@@ -7,7 +7,7 @@ import { requestValidator } from '../middlewares/middlewares';
 const router = Router();
 
 router.post('/login', [
-    check('correo', 'Ingrese un correo válido').isEmail(),
+    check('email', 'Ingrese un correo válido').isEmail(),
     check('password', 'Ingrese una contraseña').notEmpty(),
     requestValidator
 ], login);

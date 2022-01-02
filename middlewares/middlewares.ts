@@ -1,11 +1,37 @@
 import { NextFunction, Request, Response } from 'express';
-import {validationResult} from 'express-validator';
+import { validationResult } from 'express-validator';
 
 export const requestValidator = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
-    if(!errors.isEmpty()){
+    if (!errors.isEmpty()) {
         return res.status(400).json(errors);
     }
+    next();
+}
 
+export const roleValidator = (...roles: string[]) => {
+
+    return (req: any, res: Response, next: NextFunction) => {
+
+        if (!req.user) {
+            return res.status(400).json({
+                msg: 'No hay usuario autenticado para validar el rol'
+            });
+        }
+        if (!roles.includes(req.user.role)) {
+            return res.status(400).json({
+                msg: `El usuario no tiene uno de roles requeridos para realizar la petición. Roles permitidos: ${ roles }`
+            });
+        }
+        next();
+    }
+}
+
+export const areaValidator = (req: any, res: Response, next: NextFunction) => {
+    if (!req.user) {
+        return res.status(400).json({
+            msg: 'No hay usuario autenticado para validar el área'
+        });
+    }
     next();
 }

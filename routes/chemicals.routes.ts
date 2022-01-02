@@ -1,8 +1,12 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-import { getChemical, getChemicals, createChemical, updateChemical } from '../controllers/chemicals.controller';
-import { existingChemicalId, existingChemical, validHazards, validPpes } from '../helpers/db-validators';
+
+import { jwtValidator } from '../middlewares/jwt-validator';
 import { requestValidator } from '../middlewares/middlewares';
+
+import { existingChemicalId, existingChemical, validHazards, validPpes } from '../helpers/db-validators';
+
+import { getChemical, getChemicals, createChemical, updateChemical } from '../controllers/chemicals.controller';
 
 const router = Router();
 
@@ -33,6 +37,7 @@ router.post('/', [
 ], createChemical);
 
 router.put('/:id', [
+    jwtValidator,
     check('id', 'El ´parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
     check('id').custom(existingChemicalId),
     check('chemical').custom(existingChemical).optional({ nullable: true }),

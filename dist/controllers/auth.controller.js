@@ -22,13 +22,13 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const user = yield user_1.UserModel.findOne({ email });
         if (!user || user.status === false) {
             return res.status(400).json({
-                msg: 'Usuario y/o contraseña inválidos'
+                msg: 'Correo y/o contraseña inválidos'
             });
         }
         const validPassword = bcryptjs_1.default.compareSync(password, user.password);
         if (!validPassword) {
             return res.status(400).json({
-                msg: 'Usuario y/o contraseña inválidos'
+                msg: 'Correo y/o contraseña inválidos'
             });
         }
         const token = yield (0, jwt_generator_1.jwtGenerator)(user._id);
