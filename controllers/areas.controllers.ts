@@ -76,3 +76,16 @@ export const updateArea = async (req: Request, res: Response) => {
         area
     });
 }
+
+//Update area's chemicals
+export const updateAreaChemicals = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+    const { chemicals } = req.body;
+
+    const area = await AreaModel.findByIdAndUpdate(id, {chemicals}, { new: true })
+
+    return res.status(202).json({
+        area
+    });
+}
