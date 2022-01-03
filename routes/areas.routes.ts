@@ -52,9 +52,9 @@ router.put('/:id', [
 //Update area's chemicals
 router.patch('/:id', [
     jwtValidator,
-    areaValidator,
     check('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
     check('id').custom(existingAreaId),
+    areaValidator,
     check('chemicals', 'No se recibió un array de sustancias químicas').isArray().optional({ nullable: true }),
     check('chemicals').custom(validChemicals).optional({ nullable: true }),
     requestValidator

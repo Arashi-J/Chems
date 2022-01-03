@@ -20,7 +20,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateChemical = exports.createChemical = exports.getChemical = exports.getChemicals = void 0;
+exports.approveChemical = exports.updateChemical = exports.createChemical = exports.getChemical = exports.getChemicals = void 0;
 const chemical_1 = require("../models/chemical");
 const text_normalizer_1 = require("../helpers/text-normalizer");
 const getChemicals = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -84,4 +84,36 @@ const updateChemical = (req, res) => __awaiter(void 0, void 0, void 0, function*
     });
 });
 exports.updateChemical = updateChemical;
+const approveChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const user = req.user;
+    const approval = {};
+    if (user.role === 'fsms_approver') {
+        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, { fsms: true }, { new: true });
+        return res.status(202).json({
+            chemical,
+            user
+        });
+    }
+    else if (user.role === 'ems_approver') {
+        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, { ems: true }, { new: true });
+        return res.status(202).json({
+            chemical,
+            user
+        });
+    }
+    else if (user.role === 'oshms_approver') {
+        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, { oshms: true }, { new: true });
+        return res.status(202).json({
+            chemical,
+            user
+        });
+    }
+    else {
+        return res.status(400).json({
+            msg: 'El usuario no tiene el rol requerido para realizar esta ación'
+        });
+    }
+});
+exports.approveChemical = approveChemical;
 //# sourceMappingURL=chemicals.controller.js.map

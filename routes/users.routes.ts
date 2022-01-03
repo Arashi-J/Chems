@@ -43,7 +43,7 @@ router.put('/:id', [
     check('id').custom(existingUserId),
     check('name', 'El nombre no puede estar vacío').notEmpty().optional({ nullable: true }),
     check('email', 'El correo no es válido').isEmail().optional({ nullable: true }),
-    check('email').custom(existingEmail),
+    check('email').custom(existingEmail).optional({ nullable: true }),
     check('password', 'El password debe contener mínimo 6 carácteres').isLength({ min: 6 }).optional({ nullable: true }),
     check('role').custom(validRole).optional({ nullable: true }),
     check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),

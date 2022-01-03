@@ -6,7 +6,7 @@ import { requestValidator } from '../middlewares/middlewares';
 
 import { existingChemicalId, existingChemical, validHazards, validPpes } from '../helpers/db-validators';
 
-import { getChemical, getChemicals, createChemical, updateChemical } from '../controllers/chemicals.controller';
+import { getChemical, getChemicals, createChemical, updateChemical, approveChemical } from '../controllers/chemicals.controller';
 
 const router = Router();
 
@@ -19,6 +19,7 @@ router.get('/:id', [
 ], getChemical);
 
 router.post('/', [
+    jwtValidator,
     check('chemical', 'Se debe ingresar el nombre del químoco').notEmpty(),
     check('chemical').custom(existingChemical),
     check('hazards').custom(validHazards),
@@ -55,5 +56,12 @@ router.put('/:id', [
     check(['status', 'fsms', 'ems', 'oshms'], 'Los campos status, fsms, ems, oshms deben ser tipo Boolean').isBoolean().optional({ nullable: true }),
     requestValidator
 ], updateChemical);
+
+router.patch('/:id', [
+    jwtValidator,
+    check('id', 'El ´parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
+    check('id').custom(existingChemicalId),
+    requestValidator
+], approveChemical);
 
 export default router;

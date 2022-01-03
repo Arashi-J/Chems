@@ -14,6 +14,7 @@ router.get('/:id', [
     middlewares_1.requestValidator
 ], chemicals_controller_1.getChemical);
 router.post('/', [
+    jwt_validator_1.jwtValidator,
     (0, express_validator_1.check)('chemical', 'Se debe ingresar el nombre del químoco').notEmpty(),
     (0, express_validator_1.check)('chemical').custom(db_validators_1.existingChemical),
     (0, express_validator_1.check)('hazards').custom(db_validators_1.validHazards),
@@ -49,5 +50,11 @@ router.put('/:id', [
     (0, express_validator_1.check)(['status', 'fsms', 'ems', 'oshms'], 'Los campos status, fsms, ems, oshms deben ser tipo Boolean').isBoolean().optional({ nullable: true }),
     middlewares_1.requestValidator
 ], chemicals_controller_1.updateChemical);
+router.patch('/:id', [
+    jwt_validator_1.jwtValidator,
+    (0, express_validator_1.check)('id', 'El ´parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
+    (0, express_validator_1.check)('id').custom(db_validators_1.existingChemicalId),
+    middlewares_1.requestValidator
+], chemicals_controller_1.approveChemical);
 exports.default = router;
 //# sourceMappingURL=chemicals.routes.js.map

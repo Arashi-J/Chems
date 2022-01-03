@@ -40,9 +40,9 @@ router.put('/:id', [
 //Update area's chemicals
 router.patch('/:id', [
     jwt_validator_1.jwtValidator,
-    middlewares_1.areaValidator,
     (0, express_validator_1.check)('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
     (0, express_validator_1.check)('id').custom(db_validators_1.existingAreaId),
+    middlewares_1.areaValidator,
     (0, express_validator_1.check)('chemicals', 'No se recibió un array de sustancias químicas').isArray().optional({ nullable: true }),
     (0, express_validator_1.check)('chemicals').custom(db_validators_1.validChemicals).optional({ nullable: true }),
     middlewares_1.requestValidator

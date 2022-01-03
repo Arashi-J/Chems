@@ -37,7 +37,7 @@ router.put('/:id', [
     (0, express_validator_1.check)('id').custom(db_validators_1.existingUserId),
     (0, express_validator_1.check)('name', 'El nombre no puede estar vacío').notEmpty().optional({ nullable: true }),
     (0, express_validator_1.check)('email', 'El correo no es válido').isEmail().optional({ nullable: true }),
-    (0, express_validator_1.check)('email').custom(db_validators_1.existingEmail),
+    (0, express_validator_1.check)('email').custom(db_validators_1.existingEmail).optional({ nullable: true }),
     (0, express_validator_1.check)('password', 'El password debe contener mínimo 6 carácteres').isLength({ min: 6 }).optional({ nullable: true }),
     (0, express_validator_1.check)('role').custom(db_validators_1.validRole).optional({ nullable: true }),
     (0, express_validator_1.check)('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),

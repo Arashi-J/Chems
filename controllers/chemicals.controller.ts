@@ -60,7 +60,6 @@ export const createChemical = async (req: Request, res: Response) => {
     });
 
 }
-
 export const updateChemical = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { _id, __v, ...newChemicalData } = req.body;
@@ -74,4 +73,37 @@ export const updateChemical = async (req: Request, res: Response) => {
     return res.status(202).json({
         chemical
     });
+}
+export const approveChemical = async (req: any, res: Response) => {
+    const { id } = req.params;
+
+    const user = req.user;
+
+    const approval = {}
+
+    if (user.role === 'fsms_approver') {
+        const chemical = await ChemicalModel.findByIdAndUpdate(id, { fsms: true }, { new: true });
+        return res.status(202).json({
+            chemical,
+            user
+        });
+    } else if (user.role === 'ems_approver') {
+        const chemical = await ChemicalModel.findByIdAndUpdate(id, { ems: true }, { new: true });
+        return res.status(202).json({
+            chemical,
+            user
+        });
+    } else if (user.role === 'oshms_approver') {
+        const chemical = await ChemicalModel.findByIdAndUpdate(id, { oshms: true }, { new: true });
+        return res.status(202).json({
+            chemical,
+            user
+        });
+    } else {
+        return res.status(400).json({
+            msg: 'El usuario no tiene el rol requerido para realizar esta ación'
+        });
+    }
+
+
 }

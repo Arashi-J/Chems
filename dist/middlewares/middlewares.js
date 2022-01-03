@@ -32,6 +32,15 @@ const areaValidator = (req, res, next) => {
             msg: 'No hay usuario autenticado para validar el área'
         });
     }
+    const { id } = req.params;
+    const areas = req.user.areas.toString().split(',');
+    if (req.user.role !== 'admin' && !areas.includes(id)) {
+        return res.status(400).json({
+            msg: 'El usuario no tiene asignado el área a actualizar asignada o no es administrador',
+            id,
+            user: req.user
+        });
+    }
     next();
 };
 exports.areaValidator = areaValidator;
