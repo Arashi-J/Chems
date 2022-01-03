@@ -4,7 +4,7 @@ import { verify } from "jsonwebtoken";
 import { UserModel } from "../models/user";
 
 export const jwtValidator = async (req: any, res: Response, next: NextFunction) => {
-    const token = req.header('j-token');
+    const token = req.header('jtkn');
     if (!token) {
         return res.status(401).json({
             msg: 'There is no token in the request'

@@ -34,7 +34,8 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_1.UserModel.find(query)
         .skip(Number(searchFrom))
         .limit(Number(resultsLimit))
-        .populate('areas', 'area');
+        .populate('areas', 'area')
+        .populate('lastUpdatedBy', 'name');
     const totalUsers = yield user_1.UserModel.countDocuments(query);
     return res.status(200).json({
         users,
@@ -45,7 +46,9 @@ exports.getUsers = getUsers;
 //Look for user by id
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const user = yield user_1.UserModel.findById(id).populate('areas', 'area');
+    const user = yield user_1.UserModel.findById(id)
+        .populate('areas', 'area')
+        .populate('lastUpdatedBy', 'name');
     if (user) {
         return res.status(200).json({
             user
@@ -59,9 +62,14 @@ exports.getUser = getUser;
 //Create user
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, password, email, role, areas } = req.body;
-    const user = new user_1.UserModel({ name, password, email, role, areas });
-    //Email text normalization
-    user.email = user.email.toLowerCase();
+    const user = new user_1.UserModel({
+        name,
+        password,
+        email: email.toLowerCase(),
+        role,
+        areas,
+        lastUpdatedBy: req.user._id
+    });
     //Password Hash
     const salt = bcryptjs_1.default.genSaltSync();
     user.password = bcryptjs_1.default.hashSync(password, salt);
@@ -79,7 +87,13 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const salt = bcryptjs_1.default.genSaltSync();
         newUserData.password = bcryptjs_1.default.hashSync(password, salt);
     }
-    const user = yield user_1.UserModel.findByIdAndUpdate(id, newUserData, { new: true }).populate('areas', 'area');
+    if (password || Object.keys(newUserData).length !== 0) {
+        newUserData.lastUpdatedBy = req.user._id;
+        newUserData.lastUpdateDate = Date.now();
+    }
+    const user = yield user_1.UserModel.findByIdAndUpdate(id, newUserData, { new: true })
+        .populate('areas', 'area')
+        .populate('lastUpdatedBy', 'name');
     return res.status(202).json({
         user
     });

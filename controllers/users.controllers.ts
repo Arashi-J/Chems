@@ -9,15 +9,17 @@ export const getUsers = async (req: Request, res: Response) => {
     const { resultsLimit = 10, searchFrom = 0, userStatus = 'all' } = req.query;
 
     const query = userStatus === 'active' ? { status: true } :
-                userStatus === 'inactive' ? { status: false } : {}
+        userStatus === 'inactive' ? { status: false } : {}
 
     const users = await UserModel.find(query)
         .skip(Number(searchFrom))
         .limit(Number(resultsLimit))
-        .populate('areas', 'area');
+        .populate('areas', 'area')
+        .populate('lastUpdatedBy', 'name');
+
 
     const totalUsers = await UserModel.countDocuments(query);
-    
+
     return res.status(200).json({
         users,
         totalUsers
@@ -29,9 +31,11 @@ export const getUser = async (req: Request, res: Response) => {
 
     const { id } = req.params;
 
-    const user = await UserModel.findById(id).populate('areas', 'area',);
+    const user = await UserModel.findById(id)
+        .populate('areas', 'area',)
+        .populate('lastUpdatedBy', 'name');
 
-    if(user) {
+    if (user) {
         return res.status(200).json({
             user
         })
@@ -43,14 +47,18 @@ export const getUser = async (req: Request, res: Response) => {
 }
 
 //Create user
-export const createUser = async (req: Request, res: Response) => {
+export const createUser = async (req: any, res: Response) => {
 
     const { name, password, email, role, areas } = req.body;
 
-    const user = new UserModel({ name, password, email, role, areas });
-
-    //Email text normalization
-    user.email = user.email.toLowerCase();
+    const user = new UserModel({
+        name,
+        password,
+        email: email.toLowerCase(),
+        role,
+        areas,
+        lastUpdatedBy: req.user._id
+    });
 
     //Password Hash
     const salt = bcryptjs.genSaltSync();
@@ -65,17 +73,24 @@ export const createUser = async (req: Request, res: Response) => {
 }
 
 //Update User
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = async (req: any, res: Response) => {
 
     const { id } = req.params;
-    const {_id, password, __v, ...newUserData} = req.body;
+    const { _id, password, __v, ...newUserData } = req.body;
 
-    if(password){
+    if (password) {
         const salt = bcryptjs.genSaltSync();
         newUserData.password = bcryptjs.hashSync(password, salt);
     }
 
-    const user = await UserModel.findByIdAndUpdate(id, newUserData, {new: true}).populate('areas', 'area');
+    if (password || Object.keys(newUserData).length !== 0) {
+        newUserData.lastUpdatedBy = req.user._id;
+        newUserData.lastUpdateDate = Date.now();
+    }
+
+    const user = await UserModel.findByIdAndUpdate(id, newUserData, { new: true })
+        .populate('areas', 'area')
+        .populate('lastUpdatedBy', 'name');
 
     return res.status(202).json({
         user

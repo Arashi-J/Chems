@@ -14,7 +14,8 @@ export const getAreas = async (req: Request, res: Response) => {
     const areas = await AreaModel.find(query)
         .skip(Number(searchFrom))
         .limit(Number(resultsLimit))
-        .populate('chemicals', 'chemical');
+        .populate('chemicals', 'chemical')
+        .populate('lastUpdatedBy', 'name');
 
     const totalAreas = await AreaModel.countDocuments(query);
 
@@ -28,8 +29,9 @@ export const getArea = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const area = await AreaModel.findById(id)
-        .populate('chemicals', 'chemical');
-        
+        .populate('chemicals', 'chemical')
+        .populate('lastUpdatedBy', 'name');
+
     if (area) {
         return res.status(200).json({
             area
@@ -41,14 +43,15 @@ export const getArea = async (req: Request, res: Response) => {
 }
 
 //Create area
-export const createArea = async (req: Request, res: Response) => {
+export const createArea = async (req: any, res: Response) => {
 
     const { area, chemicals } = req.body;
 
-    const newArea = new AreaModel({ area, chemicals });
-
-    //Area name normalization
-    newArea.area = textNormalizer(newArea.area);
+    const newArea = new AreaModel({
+        area: textNormalizer(area),
+        chemicals,
+        lastUpdatedBy: req.user._id
+    });
 
     await newArea.save();
 
@@ -58,19 +61,28 @@ export const createArea = async (req: Request, res: Response) => {
 }
 
 //Update area
-
-export const updateArea = async (req: Request, res: Response) => {
+export const updateArea = async (req: any, res: Response) => {
 
     const { id } = req.params;
     const { _id, __v, ...newAreaData } = req.body;
+
+    if (Object.keys(newAreaData).length === 0) {
+        return res.status(400).json({
+            msg: 'No se recibieron datos para actualizar'
+        });
+    }
 
     //Area name normalization
     if (newAreaData.area) {
         newAreaData.area = textNormalizer(newAreaData.area);
     }
 
+    newAreaData.lastUpdatedBy = req.user._id;
+    newAreaData.lastUpdateDate = Date.now();
 
     const area = await AreaModel.findByIdAndUpdate(id, newAreaData, { new: true })
+        .populate('chemicals', 'chemical')
+        .populate('lastUpdatedBy', 'name');
 
     return res.status(202).json({
         area
@@ -78,12 +90,23 @@ export const updateArea = async (req: Request, res: Response) => {
 }
 
 //Update area's chemicals
-export const updateAreaChemicals = async (req: Request, res: Response) => {
+export const updateAreaChemicals = async (req: any, res: Response) => {
 
     const { id } = req.params;
     const { chemicals } = req.body;
 
-    const area = await AreaModel.findByIdAndUpdate(id, {chemicals}, { new: true })
+    if (!chemicals || chemicals.length === 0) {
+        return res.status(400).json({
+            msg: 'No se recibieron datos para actualizar'
+        });
+    }
+
+    const lastUpdatedBy = req.user._id;
+    const lastUpdateDate = Date.now();
+
+    const area = await AreaModel.findByIdAndUpdate(id, { chemicals, lastUpdatedBy, lastUpdateDate }, { new: true })
+        .populate('chemicals', 'chemical')
+        .populate('lastUpdatedBy', 'name');
 
     return res.status(202).json({
         area

@@ -13,7 +13,7 @@ exports.jwtValidator = void 0;
 const jsonwebtoken_1 = require("jsonwebtoken");
 const user_1 = require("../models/user");
 const jwtValidator = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.header('j-token');
+    const token = req.header('jtkn');
     if (!token) {
         return res.status(401).json({
             msg: 'There is no token in the request'

@@ -16,6 +16,14 @@ const AreaSchema = new mongoose_1.Schema({
     chemicals: {
         type: [mongoose_1.Schema.Types.ObjectId],
         ref: 'Chemical'
+    },
+    lastUpdatedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    lastUpdateDate: {
+        type: Date,
+        default: Date.now
     }
 });
 exports.AreaModel = (0, mongoose_1.model)('Area', AreaSchema);

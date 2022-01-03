@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { Area } from '../interfaces/interfaces';
 
 const AreaSchema = new Schema<Area>({
@@ -12,11 +12,18 @@ const AreaSchema = new Schema<Area>({
         type: Boolean,
         default: true
     },
-    chemicals:{
+    chemicals: {
         type: [Schema.Types.ObjectId],
         ref: 'Chemical'
+    },
+    lastUpdatedBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    lastUpdateDate: {
+        type: Date,
+        default: Date.now
     }
-
 });
 
 

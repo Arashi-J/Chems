@@ -1,10 +1,16 @@
+import { Request } from "express";
+import { Date, ObjectId } from "mongoose";
+
 export interface User {
+    _id: ObjectId;
     name: string;
     password: string;
     email: string;
-    role: string
+    role: string;
     status: boolean;
-    areas?: string[];
+    areas?: ObjectId[];
+    lastUpdatedBy?: ObjectId;
+    lastUpdateDate?: Date;
 }
 
 export interface Role {
@@ -15,21 +21,25 @@ export interface Role {
 export interface Area {
     area: string;
     status: boolean;
-    chemicals?: Chemical[];
+    chemicals?: ObjectId[];
+    lastUpdatedBy?: ObjectId;
+    lastUpdateDate?: Date;
 }
 
 export interface Chemical {
     chemical: string;
-    hazards?: Hazard[];
+    hazards?: ObjectId[];
     providers?: string[];
     manufacturers?: string[];
     pPhrases?: Phrase[];
     hPhrases?: Phrase[];
-    ppes?: Ppe[];
-    fsms: boolean;
-    ems: boolean;
-    oshms: boolean;
+    ppes?: ObjectId[];
+    fsms?: object;
+    ems?: object;
+    oshms?: object;
     status: boolean;
+    lastUpdatedBy?: ObjectId;
+    lastUpdateDate?: Date;
 }
 
 export interface Hazard {
@@ -47,4 +57,7 @@ export interface Phrase {
 export interface Ppe {
     ppe: string;
     img: string;
+}
+export interface ExtRequest extends Request {
+    user: User
 }

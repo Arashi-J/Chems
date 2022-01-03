@@ -34,20 +34,55 @@ const ChemicalSchema = new Schema<Chemical>({
         default: []
     },
     fsms: {
-        type: Boolean,
-        default: false
+        approval: {
+            type: Boolean,
+            default: false
+        },
+        approver: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        approvalDate: {
+            type: Date
+        }
     },
     ems: {
-        type: Boolean,
-        default: false
+        approval: {
+            type: Boolean,
+            default: false
+        },
+        approver: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        approvalDate: {
+            type: Date
+        }
     },
     oshms: {
-        type: Boolean,
-        default: false
+        approval: {
+            type: Boolean,
+            default: false
+        },
+        approver: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        approvalDate: {
+            type: Date
+        }
     },
     status: {
         type: Boolean,
         default: true
+    },
+    lastUpdatedBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    lastUpdateDate: {
+        type: Date,
+        default: Date.now
     }
 });
 

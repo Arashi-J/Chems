@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { ExtRequest } from '../interfaces/interfaces';
+
 import { ChemicalModel } from '../models/chemical';
 import { textNormalizer } from '../helpers/text-normalizer';
 
@@ -12,7 +14,8 @@ export const getChemicals = async (req: Request, res: Response) => {
         .skip(Number(searchFrom))
         .limit(Number(resultsLimit))
         .populate('hazards', 'hazard')
-        .populate('ppes', 'ppe');
+        .populate('ppes', 'ppe')
+        .populate('lastUpdatedBy', 'name');
 
     const totalChemicals = await ChemicalModel.countDocuments(query);
 
@@ -26,7 +29,8 @@ export const getChemical = async (req: Request, res: Response) => {
 
     const chemical = await ChemicalModel.findById(id)
         .populate('hazards', 'hazard')
-        .populate('ppes', 'ppe');
+        .populate('ppes', 'ppe')
+        .populate('lastUpdatedBy', 'name');
 
     if (chemical) {
         return res.status(200).json({
@@ -38,20 +42,19 @@ export const getChemical = async (req: Request, res: Response) => {
         msg: 'Sustancia química no encontrada'
     })
 }
-export const createChemical = async (req: Request, res: Response) => {
+export const createChemical = async (req: any, res: Response) => {
     const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppes } = req.body;
 
     const newChemical = new ChemicalModel({
-        chemical,
+        chemical: textNormalizer(chemical),
         hazards,
         providers,
         manufacturers,
         pPhrases,
         hPhrases,
-        ppes
+        ppes,
+        lastUpdatedBy: req.user._id
     });
-
-    newChemical.chemical = textNormalizer(newChemical.chemical);
 
     newChemical.save();
 
@@ -60,15 +63,26 @@ export const createChemical = async (req: Request, res: Response) => {
     });
 
 }
-export const updateChemical = async (req: Request, res: Response) => {
+export const updateChemical = async (req: any, res: Response) => {
     const { id } = req.params;
-    const { _id, __v, ...newChemicalData } = req.body;
+    const { _id, __v, fsms, ems, oshms, ...newChemicalData } = req.body;
+
+
+    if (Object.keys(newChemicalData).length === 0) {
+        return res.status(400).json({
+            msg: 'No se recibieron datos para actualizar'
+        });
+    }
+    newChemicalData.lastUpdatedBy = req.user._id;
+    newChemicalData.lastUpdateDate = Date.now();
 
     if (newChemicalData.chemical) {
         newChemicalData.chemical = textNormalizer(newChemicalData.chemical);
     }
 
-    const chemical = await ChemicalModel.findByIdAndUpdate(id, newChemicalData, { new: true });
+    const chemical = await ChemicalModel.findByIdAndUpdate(id, newChemicalData, { new: true })
+        .populate('hazards', 'hazard')
+        .populate('ppes', 'ppe');
 
     return res.status(202).json({
         chemical
@@ -79,22 +93,50 @@ export const approveChemical = async (req: any, res: Response) => {
 
     const user = req.user;
 
-    const approval = {}
-
     if (user.role === 'fsms_approver') {
-        const chemical = await ChemicalModel.findByIdAndUpdate(id, { fsms: true }, { new: true });
+
+        const fsms = {
+            approval: true,
+            approver: req.user._id,
+            approvalDate: Date.now()
+        }
+
+        const chemical = await ChemicalModel.findByIdAndUpdate(id, fsms, { new: true })
+            .populate('hazards', 'hazard')
+            .populate('ppes', 'ppe')
+            .populate('lastUpdatedBy', 'name');
         return res.status(202).json({
             chemical,
             user
         });
     } else if (user.role === 'ems_approver') {
-        const chemical = await ChemicalModel.findByIdAndUpdate(id, { ems: true }, { new: true });
+
+        const ems = {
+            approval: true,
+            approver: req.user._id,
+            approvalDate: Date.now()
+        }
+
+        const chemical = await ChemicalModel.findByIdAndUpdate(id, ems, { new: true })
+            .populate('hazards', 'hazard')
+            .populate('ppes', 'ppe')
+            .populate('lastUpdatedBy', 'name');
         return res.status(202).json({
             chemical,
             user
         });
     } else if (user.role === 'oshms_approver') {
-        const chemical = await ChemicalModel.findByIdAndUpdate(id, { oshms: true }, { new: true });
+
+        const oshms = {
+            approval: true,
+            approver: req.user._id,
+            approvalDate: Date.now()
+        }
+
+        const chemical = await ChemicalModel.findByIdAndUpdate(id, oshms, { new: true })
+            .populate('hazards', 'hazard')
+            .populate('ppes', 'ppe')
+            .populate('lastUpdatedBy', 'name');
         return res.status(202).json({
             chemical,
             user

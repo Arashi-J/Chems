@@ -35,20 +35,55 @@ const ChemicalSchema = new mongoose_1.Schema({
         default: []
     },
     fsms: {
-        type: Boolean,
-        default: false
+        approval: {
+            type: Boolean,
+            default: false
+        },
+        approver: {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        approvalDate: {
+            type: Date
+        }
     },
     ems: {
-        type: Boolean,
-        default: false
+        approval: {
+            type: Boolean,
+            default: false
+        },
+        approver: {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        approvalDate: {
+            type: Date
+        }
     },
     oshms: {
-        type: Boolean,
-        default: false
+        approval: {
+            type: Boolean,
+            default: false
+        },
+        approver: {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        approvalDate: {
+            type: Date
+        }
     },
     status: {
         type: Boolean,
         default: true
+    },
+    lastUpdatedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    lastUpdateDate: {
+        type: Date,
+        default: Date.now
     }
 });
 exports.ChemicalModel = (0, mongoose_1.model)('Chemical', ChemicalSchema);

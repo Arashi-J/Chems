@@ -40,6 +40,14 @@ const UserSchema = new mongoose_1.Schema({
     status: {
         type: Boolean,
         default: true
+    },
+    lastUpdatedBy: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    lastUpdateDate: {
+        type: Date,
+        default: Date.now
     }
 });
 UserSchema.methods.toJSON = function () {

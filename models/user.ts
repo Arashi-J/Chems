@@ -28,6 +28,14 @@ const UserSchema = new Schema<User>({
     status: {
         type: Boolean,
         default: true
+    },
+    lastUpdatedBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    lastUpdateDate: {
+        type: Date,
+        default: Date.now
     }
 });
 

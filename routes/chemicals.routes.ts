@@ -33,7 +33,6 @@ router.post('/', [
     ], 'Las frases P y H deben ser un arreglo de objetos tipo Phrase: [{code: string, description: string}]').isString(),
     check(['providers', 'manufacturers'], 'El valor ingresado debe ser un Array de tipos String').isArray().optional({ nullable: true }),
     check(['providers[*]', 'manufacturers[*]'], 'Los items del array deben ser tipo string').isString().optional({ nullable: true }),
-    check(['status', 'fsms', 'ems', 'oshms'], 'Los campos status, fsms, ems, oshms deben ser tipo Boolean').isBoolean().optional({ nullable: true }),
     requestValidator
 ], createChemical);
 
@@ -51,15 +50,15 @@ router.put('/:id', [
         'hPhrases.*.description',
         'pPhrases.*.description',
     ], 'Las frases P y H deben ser un arreglo de objetos tipo Phrase: [{code: string, description: string}]').isString(),
-    check(['providers', 'manufacturers'], 'El valor ingresado debe ser un Array de tipos String').isArray().optional({ nullable: true }),
+    check(['providers', 'manufacturers'], 'Los items del array deben ser tipo string').isArray().optional({ nullable: true }),
     check(['providers[*]', 'manufacturers[*]'], 'Los items del array deben ser tipo string').isString().optional({ nullable: true }),
-    check(['status', 'fsms', 'ems', 'oshms'], 'Los campos status, fsms, ems, oshms deben ser tipo Boolean').isBoolean().optional({ nullable: true }),
+    check('status', 'El campo status deben ser tipo Boolean').isBoolean().optional({ nullable: true }),
     requestValidator
 ], updateChemical);
 
 router.patch('/:id', [
     jwtValidator,
-    check('id', 'El ´parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
+    check('id', 'El parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
     check('id').custom(existingChemicalId),
     requestValidator
 ], approveChemical);
