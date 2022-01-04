@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AreaModel } from '../models/area';
-import { textNormalizer } from '../helpers/text-normalizer';
+import { textNormalizer } from '../helpers/text-normalizers';
 
 
 //List areas
@@ -72,7 +72,6 @@ export const updateArea = async (req: any, res: Response) => {
         });
     }
 
-    //Area name normalization
     if (newAreaData.area) {
         newAreaData.area = textNormalizer(newAreaData.area);
     }

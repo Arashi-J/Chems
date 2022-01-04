@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../models/user';
 import bcryptjs from 'bcryptjs';
+import { titleCase } from '../helpers/text-normalizers';
 
 
 //List Users
@@ -52,10 +53,10 @@ export const createUser = async (req: any, res: Response) => {
     const { name, password, email, role, areas } = req.body;
 
     const user = new UserModel({
-        name,
+        name: titleCase(name.trim()),
         password,
-        email: email.toLowerCase(),
-        role,
+        email: email.trim().toLowerCase(),
+        role: role.trim().toLowerCase(),
         areas,
         lastUpdatedBy: req.user._id
     });
@@ -78,15 +79,26 @@ export const updateUser = async (req: any, res: Response) => {
     const { id } = req.params;
     const { _id, password, __v, ...newUserData } = req.body;
 
+
+
+    if (!password && Object.keys(newUserData).length === 0) {
+        return res.status(400).json({
+            msg: 'No se recibieron datos para actualizar'
+        });
+    }
+
+    newUserData.lastUpdatedBy = req.user._id;
+    newUserData.lastUpdateDate = Date.now();
+
     if (password) {
         const salt = bcryptjs.genSaltSync();
         newUserData.password = bcryptjs.hashSync(password, salt);
     }
 
-    if (password || Object.keys(newUserData).length !== 0) {
-        newUserData.lastUpdatedBy = req.user._id;
-        newUserData.lastUpdateDate = Date.now();
+    if (newUserData.name) {
+        newUserData.name = titleCase(newUserData.name.trim())
     }
+
 
     const user = await UserModel.findByIdAndUpdate(id, newUserData, { new: true })
         .populate('areas', 'area')

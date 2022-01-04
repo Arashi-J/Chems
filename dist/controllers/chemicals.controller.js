@@ -22,7 +22,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.approveChemical = exports.updateChemical = exports.createChemical = exports.getChemical = exports.getChemicals = void 0;
 const chemical_1 = require("../models/chemical");
-const text_normalizer_1 = require("../helpers/text-normalizer");
+const text_normalizers_1 = require("../helpers/text-normalizers");
 const getChemicals = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultsLimit = 10, searchFrom = 0, chemicalStatus = 'all' } = req.query;
     const query = chemicalStatus === 'active' ? { status: true } :
@@ -65,7 +65,7 @@ exports.getChemical = getChemical;
 const createChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppes } = req.body;
     const newChemical = new chemical_1.ChemicalModel({
-        chemical: (0, text_normalizer_1.textNormalizer)(chemical),
+        chemical: (0, text_normalizers_1.textNormalizer)(chemical),
         hazards,
         providers,
         manufacturers,
@@ -91,7 +91,7 @@ const updateChemical = (req, res) => __awaiter(void 0, void 0, void 0, function*
     newChemicalData.lastUpdatedBy = req.user._id;
     newChemicalData.lastUpdateDate = Date.now();
     if (newChemicalData.chemical) {
-        newChemicalData.chemical = (0, text_normalizer_1.textNormalizer)(newChemicalData.chemical);
+        newChemicalData.chemical = (0, text_normalizers_1.textNormalizer)(newChemicalData.chemical);
     }
     const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, newChemicalData, { new: true })
         .populate('hazards', 'hazard')

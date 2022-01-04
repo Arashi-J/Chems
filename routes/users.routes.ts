@@ -29,7 +29,6 @@ router.post('/', [
     check('email', 'El correo no es válido').isEmail(),
     check('email').custom(existingEmail),
     check('role').custom(validRole),
-    check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
     check('areas', 'No se recibió un array de áreas').isArray().optional({ nullable: true }),
     check('areas').custom(validAreas).optional({ nullable: true }),
     requestValidator

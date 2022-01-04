@@ -22,7 +22,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateAreaChemicals = exports.updateArea = exports.createArea = exports.getArea = exports.getAreas = void 0;
 const area_1 = require("../models/area");
-const text_normalizer_1 = require("../helpers/text-normalizer");
+const text_normalizers_1 = require("../helpers/text-normalizers");
 //List areas
 const getAreas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultsLimit = 10, searchFrom = 0, areaStatus = 'all' } = req.query;
@@ -60,7 +60,7 @@ exports.getArea = getArea;
 const createArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { area, chemicals } = req.body;
     const newArea = new area_1.AreaModel({
-        area: (0, text_normalizer_1.textNormalizer)(area),
+        area: (0, text_normalizers_1.textNormalizer)(area),
         chemicals,
         lastUpdatedBy: req.user._id
     });
@@ -79,9 +79,8 @@ const updateArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             msg: 'No se recibieron datos para actualizar'
         });
     }
-    //Area name normalization
     if (newAreaData.area) {
-        newAreaData.area = (0, text_normalizer_1.textNormalizer)(newAreaData.area);
+        newAreaData.area = (0, text_normalizers_1.textNormalizer)(newAreaData.area);
     }
     newAreaData.lastUpdatedBy = req.user._id;
     newAreaData.lastUpdateDate = Date.now();

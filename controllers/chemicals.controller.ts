@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { ExtRequest } from '../interfaces/interfaces';
 
 import { ChemicalModel } from '../models/chemical';
-import { textNormalizer } from '../helpers/text-normalizer';
+import { textNormalizer } from '../helpers/text-normalizers';
 
 export const getChemicals = async (req: Request, res: Response) => {
     const { resultsLimit = 10, searchFrom = 0, chemicalStatus = 'all' } = req.query;

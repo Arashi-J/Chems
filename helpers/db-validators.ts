@@ -2,7 +2,7 @@ import { AreaModel } from '../models/area';
 import { RoleModel } from '../models/role';
 import { UserModel } from '../models/user';
 import { ChemicalModel } from '../models/chemical';
-import { textNormalizer } from './text-normalizer';
+import { textNormalizer } from './text-normalizers';
 import { HazardModel } from '../models/hazard';
 import { PpeModel } from '../models/ppe';
 
@@ -62,7 +62,7 @@ export const existingChemical = async (chemical: string) => {
 
 
 export const validRole = async (role: string) => {
-    const validRole = await RoleModel.findOne({ role });
+    const validRole = await RoleModel.findOne({ role: role.trim().toLowerCase() });
     if (!validRole) {
         throw new Error(`El rol de usuario ${ role } no es válido`);
     }
@@ -96,7 +96,7 @@ export const validChemicals = async (chemicals: string[] = []) => {
                 throw new Error(`El valor ${ chemicalId } no es un id de MongoDB válido`);
             }
             const validChemical = await ChemicalModel.findById(chemicalId);
-            if(!validChemical){
+            if (!validChemical) {
                 throw new Error(`El sustancia química con el id ${ chemicalId } no existe en el catalogo`);
             }
         }
@@ -112,7 +112,7 @@ export const validHazards = async (hazards: string[] = []) => {
                 throw new Error(`El valor ${ hazardId } no es un id de MongoDB válido`);
             }
             const validChemical = await HazardModel.findById(hazardId);
-            if(!validChemical){
+            if (!validChemical) {
                 throw new Error(`El peligro con el id ${ hazardId } no existe en el catalogo`);
             }
         }
@@ -128,7 +128,7 @@ export const validPpes = async (ppes: string[] = []) => {
                 throw new Error(`El valor ${ ppedId } no es un id de MongoDB válido`);
             }
             const validChemical = await PpeModel.findById(ppedId);
-            if(!validChemical){
+            if (!validChemical) {
                 throw new Error(`El EPP con el id ${ ppedId } no existe en el catalogo`);
             }
         }

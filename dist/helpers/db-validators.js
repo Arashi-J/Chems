@@ -14,7 +14,7 @@ const area_1 = require("../models/area");
 const role_1 = require("../models/role");
 const user_1 = require("../models/user");
 const chemical_1 = require("../models/chemical");
-const text_normalizer_1 = require("./text-normalizer");
+const text_normalizers_1 = require("./text-normalizers");
 const hazard_1 = require("../models/hazard");
 const ppe_1 = require("../models/ppe");
 const existingUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -47,7 +47,7 @@ const existingEmail = (email) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.existingEmail = existingEmail;
 const existingArea = (area) => __awaiter(void 0, void 0, void 0, function* () {
-    area = (0, text_normalizer_1.textNormalizer)(area);
+    area = (0, text_normalizers_1.textNormalizer)(area);
     const existingArea = yield area_1.AreaModel.findOne({ area });
     if (existingArea) {
         throw new Error(`El área ${area} ya existe`);
@@ -55,7 +55,7 @@ const existingArea = (area) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.existingArea = existingArea;
 const existingChemical = (chemical) => __awaiter(void 0, void 0, void 0, function* () {
-    chemical = (0, text_normalizer_1.textNormalizer)(chemical);
+    chemical = (0, text_normalizers_1.textNormalizer)(chemical);
     const existingChemical = yield chemical_1.ChemicalModel.findOne({ chemical });
     if (existingChemical) {
         throw new Error(`La sustancia química con nombre: ${chemical} ya existe`);
@@ -63,7 +63,7 @@ const existingChemical = (chemical) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.existingChemical = existingChemical;
 const validRole = (role) => __awaiter(void 0, void 0, void 0, function* () {
-    const validRole = yield role_1.RoleModel.findOne({ role });
+    const validRole = yield role_1.RoleModel.findOne({ role: role.trim().toLowerCase() });
     if (!validRole) {
         throw new Error(`El rol de usuario ${role} no es válido`);
     }
