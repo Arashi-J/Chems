@@ -32,6 +32,9 @@ const getChemicals = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         .limit(Number(resultsLimit))
         .populate('hazards', 'hazard')
         .populate('ppes', 'ppe')
+        .populate('fsms.approver', 'name')
+        .populate('ems.approver', 'name')
+        .populate('oshms.approver', 'name')
         .populate('lastUpdatedBy', 'name');
     const totalChemicals = yield chemical_1.ChemicalModel.countDocuments(query);
     return res.status(200).json({
@@ -45,6 +48,9 @@ const getChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const chemical = yield chemical_1.ChemicalModel.findById(id)
         .populate('hazards', 'hazard')
         .populate('ppes', 'ppe')
+        .populate('fsms.approver', 'name')
+        .populate('ems.approver', 'name')
+        .populate('oshms.approver', 'name')
         .populate('lastUpdatedBy', 'name');
     if (chemical) {
         return res.status(200).json({
@@ -89,7 +95,11 @@ const updateChemical = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, newChemicalData, { new: true })
         .populate('hazards', 'hazard')
-        .populate('ppes', 'ppe');
+        .populate('ppes', 'ppe')
+        .populate('fsms.approver', 'name')
+        .populate('ems.approver', 'name')
+        .populate('oshms.approver', 'name')
+        .populate('lastUpdatedBy', 'name');
     return res.status(202).json({
         chemical
     });
@@ -104,13 +114,10 @@ const approveChemical = (req, res) => __awaiter(void 0, void 0, void 0, function
             approver: req.user._id,
             approvalDate: Date.now()
         };
-        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, fsms, { new: true })
-            .populate('hazards', 'hazard')
-            .populate('ppes', 'ppe')
-            .populate('lastUpdatedBy', 'name');
+        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, { fsms }, { new: true })
+            .populate('fsms.approver', 'name');
         return res.status(202).json({
-            chemical,
-            user
+            chemical
         });
     }
     else if (user.role === 'ems_approver') {
@@ -119,13 +126,10 @@ const approveChemical = (req, res) => __awaiter(void 0, void 0, void 0, function
             approver: req.user._id,
             approvalDate: Date.now()
         };
-        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, ems, { new: true })
-            .populate('hazards', 'hazard')
-            .populate('ppes', 'ppe')
-            .populate('lastUpdatedBy', 'name');
+        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, { ems }, { new: true })
+            .populate('ems.approver', 'name');
         return res.status(202).json({
-            chemical,
-            user
+            chemical
         });
     }
     else if (user.role === 'oshms_approver') {
@@ -134,13 +138,10 @@ const approveChemical = (req, res) => __awaiter(void 0, void 0, void 0, function
             approver: req.user._id,
             approvalDate: Date.now()
         };
-        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, oshms, { new: true })
-            .populate('hazards', 'hazard')
-            .populate('ppes', 'ppe')
-            .populate('lastUpdatedBy', 'name');
+        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, { oshms }, { new: true })
+            .populate('oshms.approver', 'name');
         return res.status(202).json({
-            chemical,
-            user
+            chemical
         });
     }
     else {
