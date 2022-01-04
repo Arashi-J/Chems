@@ -2,7 +2,6 @@ import { Request } from "express";
 import { Date, ObjectId } from "mongoose";
 
 export interface User {
-    _id: ObjectId;
     name: string;
     password: string;
     email: string;
@@ -22,6 +21,7 @@ export interface Area {
     area: string;
     status: boolean;
     chemicals?: ObjectId[];
+    leader?: string; 
     lastUpdatedBy?: ObjectId;
     lastUpdateDate?: Date;
 }
@@ -31,12 +31,35 @@ export interface Chemical {
     hazards?: ObjectId[];
     providers?: string[];
     manufacturers?: string[];
-    pPhrases?: Phrase[];
-    hPhrases?: Phrase[];
+    pPhrases?: [{
+        code: string;
+        description: string;
+    }];
+    hPhrases?: [{
+        code: string;
+        description: string;
+    }];
     ppes?: ObjectId[];
-    fsms?: object;
-    ems?: object;
-    oshms?: object;
+    sds: {
+        status: boolean;
+        language: string;
+        link: string
+    };
+    fsms: {
+        approval: boolean;
+        approver: ObjectId;
+        approvalDate: Date;
+    };
+    ems: {
+        approval: boolean;
+        approver: ObjectId;
+        approvalDate: Date;
+    };
+    oshms: {
+        approval: boolean;
+        approver: ObjectId;
+        approvalDate: Date;
+    };
     status: boolean;
     lastUpdatedBy?: ObjectId;
     lastUpdateDate?: Date;
@@ -50,14 +73,7 @@ export interface Hazard {
     precaution: string;
     pictogram: string;
 }
-export interface Phrase {
-    code: string;
-    description: string;
-}
 export interface Ppe {
     ppe: string;
     img: string;
-}
-export interface ExtRequest extends Request {
-    user: User
 }

@@ -21,17 +21,31 @@ const ChemicalSchema = new Schema<Chemical>({
         type: [String],
     },
     pPhrases: [{
-        code: String,
-        description: String,
+        code: { type: String },
+        description: { type: String },
     }],
     hPhrases: [{
-        code: String,
-        description: String
+        code: { type: String },
+        description: { type: String },
     }],
     ppes: {
         type: [Schema.Types.ObjectId],
-        ref: PpeModel,
-        default: []
+        ref: PpeModel
+    },
+    sds: {
+        status: {
+            type: Boolean,
+            default: false
+        },
+        language: {
+            type: String,
+            enum: ["español", "inglés", "otro", ""],
+            default: ""
+        },
+        link: {
+            type: String,
+            default: ''
+        }
     },
     fsms: {
         approval: {
@@ -44,7 +58,7 @@ const ChemicalSchema = new Schema<Chemical>({
         },
         approvalDate: {
             type: Date
-        }
+        },
     },
     ems: {
         approval: {
@@ -57,7 +71,7 @@ const ChemicalSchema = new Schema<Chemical>({
         },
         approvalDate: {
             type: Date
-        }
+        },
     },
     oshms: {
         approval: {
@@ -70,11 +84,12 @@ const ChemicalSchema = new Schema<Chemical>({
         },
         approvalDate: {
             type: Date
-        }
+        },
     },
     status: {
         type: Boolean,
-        default: true
+        default: true,
+        required: true
     },
     lastUpdatedBy: {
         type: Schema.Types.ObjectId,
@@ -84,6 +99,13 @@ const ChemicalSchema = new Schema<Chemical>({
         type: Date,
         default: Date.now
     }
+
 });
+
+ChemicalSchema.methods.toJSON = function(){
+    const {__v, ...chemical} = this.toObject();
+    return chemical
+}
+
 
 export const ChemicalModel = model<Chemical>('Chemical', ChemicalSchema);

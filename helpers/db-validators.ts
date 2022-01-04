@@ -104,33 +104,28 @@ export const validChemicals = async (chemicals: string[] = []) => {
 }
 
 export const validHazards = async (hazards: string[] = []) => {
-    if (hazards === []) {
-        return
-    } else {
-        for (const hazardId of hazards) {
-            if (hazardId.length !== 24) {
-                throw new Error(`El valor ${ hazardId } no es un id de MongoDB válido`);
-            }
-            const validChemical = await HazardModel.findById(hazardId);
-            if (!validChemical) {
-                throw new Error(`El peligro con el id ${ hazardId } no existe en el catalogo`);
-            }
+
+    for (const hazardId of hazards) {
+        if (hazardId.length !== 24) {
+            throw new Error(`El valor ${ hazardId } no es un id de MongoDB válido`);
         }
+        const validHazard = await HazardModel.findById(hazardId);
+        if (!validHazard) {
+            throw new Error(`El peligro con el id ${ hazardId } no existe en el catalogo`);
+        }
+
     }
 }
 
 export const validPpes = async (ppes: string[] = []) => {
-    if (ppes === []) {
-        return
-    } else {
-        for (const ppedId of ppes) {
-            if (ppedId.length !== 24) {
-                throw new Error(`El valor ${ ppedId } no es un id de MongoDB válido`);
-            }
-            const validChemical = await PpeModel.findById(ppedId);
-            if (!validChemical) {
-                throw new Error(`El EPP con el id ${ ppedId } no existe en el catalogo`);
-            }
+    for (const ppedId of ppes) {
+        if (ppedId.length !== 24) {
+            throw new Error(`El valor ${ ppedId } no es un id de MongoDB válido`);
+        }
+        const validChemical = await PpeModel.findById(ppedId);
+        if (!validChemical) {
+            throw new Error(`El EPP con el id ${ ppedId } no existe en el catalogo`);
         }
     }
 }
+

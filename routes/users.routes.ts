@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { check } from 'express-validator';
+import { body, param } from 'express-validator';
 
 import { jwtValidator } from '../middlewares/jwt-validator';
 import { requestValidator, roleValidator } from '../middlewares/middlewares';
@@ -15,8 +15,8 @@ router.get('/', getUsers);
 
 //Look for user by id
 router.get('/:id', [
-    check('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
-    check('id').custom(existingUserId),
+    param('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
+    param('id').custom(existingUserId),
     requestValidator
 ], getUser)
 
@@ -24,13 +24,13 @@ router.get('/:id', [
 router.post('/', [
     jwtValidator,
     roleValidator('admin'),
-    check('name', 'El nombre no puede estar vacío').notEmpty(),
-    check('password', 'El password debe contener mínimo 6 carácteres').isLength({ min: 6 }),
-    check('email', 'El correo no es válido').isEmail(),
-    check('email').custom(existingEmail),
-    check('role').custom(validRole),
-    check('areas', 'No se recibió un array de áreas').isArray().optional({ nullable: true }),
-    check('areas').custom(validAreas).optional({ nullable: true }),
+    body('name', 'El nombre no puede estar vacío').notEmpty(),
+    body('password', 'El password debe contener mínimo 6 carácteres').isLength({ min: 6 }),
+    body('email', 'El correo no es válido').isEmail(),
+    body('email').custom(existingEmail),
+    body('role').custom(validRole),
+    body('areas', 'No se recibió un array de áreas').isArray().optional({ nullable: true }),
+    body('areas').custom(validAreas).optional({ nullable: true }),
     requestValidator
 ], createUser);
 
@@ -38,16 +38,16 @@ router.post('/', [
 router.put('/:id', [
     jwtValidator,
     roleValidator('admin'),
-    check('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
-    check('id').custom(existingUserId),
-    check('name', 'El nombre no puede estar vacío').notEmpty().optional({ nullable: true }),
-    check('email', 'El correo no es válido').isEmail().optional({ nullable: true }),
-    check('email').custom(existingEmail).optional({ nullable: true }),
-    check('password', 'El password debe contener mínimo 6 carácteres').isLength({ min: 6 }).optional({ nullable: true }),
-    check('role').custom(validRole).optional({ nullable: true }),
-    check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
-    check('areas', 'No se recibió un array de áreas').isArray().optional({ nullable: true }),
-    check('areas', 'Uno o más valores inválidos').custom(validAreas).optional({ nullable: true }),
+    param('id', 'El parámetro de búsqueda no es un id de MongoDB válido').isMongoId(),
+    param('id').custom(existingUserId),
+    body('name', 'El nombre no puede estar vacío').notEmpty().optional({ nullable: true }),
+    body('email', 'El correo no es válido').isEmail().optional({ nullable: true }),
+    body('email').custom(existingEmail).optional({ nullable: true }),
+    body('password', 'El password debe contener mínimo 6 carácteres').isLength({ min: 6 }).optional({ nullable: true }),
+    body('role').custom(validRole).optional({ nullable: true }),
+    body('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
+    body('areas', 'No se recibió un array de áreas').isArray().optional({ nullable: true }),
+    body('areas', 'Uno o más valores inválidos').custom(validAreas).optional({ nullable: true }),
     requestValidator
 ], updateUser);
 

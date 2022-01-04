@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { ExtRequest } from '../interfaces/interfaces';
 
 import { ChemicalModel } from '../models/chemical';
 import { textNormalizer } from '../helpers/text-normalizers';
@@ -49,7 +48,17 @@ export const getChemical = async (req: Request, res: Response) => {
     })
 }
 export const createChemical = async (req: any, res: Response) => {
-    const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppes } = req.body;
+    const {
+        chemical,
+        hazards,
+        providers,
+        manufacturers,
+        pPhrases,
+        hPhrases,
+        ppes,
+        sds,
+        status
+    } = req.body;
 
     const newChemical = new ChemicalModel({
         chemical: textNormalizer(chemical),
@@ -59,8 +68,14 @@ export const createChemical = async (req: any, res: Response) => {
         pPhrases,
         hPhrases,
         ppes,
+        sds,
+        status,
         lastUpdatedBy: req.user._id
     });
+
+    if (newChemical.sds.language) {
+        newChemical.sds.language = newChemical.sds.language.toLowerCase()
+    }
 
     newChemical.save();
 
@@ -101,9 +116,10 @@ export const updateChemical = async (req: any, res: Response) => {
 export const approveChemical = async (req: any, res: Response) => {
     const { id } = req.params;
 
-    const user = req.user;
+    const { role } = req.user;
 
-    if (user.role === 'fsms_approver') {
+
+    if (role === 'fsms_approver') {
 
         const fsms = {
             approval: true,
@@ -111,14 +127,14 @@ export const approveChemical = async (req: any, res: Response) => {
             approvalDate: Date.now()
         }
 
-        const chemical = await ChemicalModel.findByIdAndUpdate(id, { fsms }, { new: true })
+        const Chemical = await ChemicalModel.findByIdAndUpdate(id, { fsms }, { new: true })
             .populate('fsms.approver', 'name');
 
 
         return res.status(202).json({
-            chemical
+            Chemical
         });
-    } else if (user.role === 'ems_approver') {
+    } else if (role === 'ems_approver') {
 
         const ems = {
             approval: true,
@@ -132,7 +148,7 @@ export const approveChemical = async (req: any, res: Response) => {
         return res.status(202).json({
             chemical
         });
-    } else if (user.role === 'oshms_approver') {
+    } else if (role === 'oshms_approver') {
 
         const oshms = {
             approval: true,

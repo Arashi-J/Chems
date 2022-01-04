@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { Hazard } from '../interfaces/interfaces';
 
 const HazardSchema = new Schema<Hazard>({
@@ -31,6 +31,10 @@ const HazardSchema = new Schema<Hazard>({
 
 });
 
+HazardSchema.methods.toJSON = function () {
+    const { __v, ...hazard } = this.toObject();
+    return hazard
+}
 
 
 export const HazardModel = model<Hazard>('Hazard', HazardSchema);

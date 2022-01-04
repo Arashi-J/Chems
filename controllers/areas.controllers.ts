@@ -45,16 +45,16 @@ export const getArea = async (req: Request, res: Response) => {
 //Create area
 export const createArea = async (req: any, res: Response) => {
 
-    const { area, chemicals } = req.body;
+    const { area, chemicals, leader } = req.body;
 
     const newArea = new AreaModel({
         area: textNormalizer(area),
         chemicals,
+        leader: tittleCase(leader),
         lastUpdatedBy: req.user._id
     });
-
     await newArea.save();
-
+    
     return res.status(201).json({
         newArea
     });
@@ -71,11 +71,9 @@ export const updateArea = async (req: any, res: Response) => {
             msg: 'No se recibieron datos para actualizar'
         });
     }
-
     if (newAreaData.area) {
         newAreaData.area = textNormalizer(newAreaData.area);
     }
-
     newAreaData.lastUpdatedBy = req.user._id;
     newAreaData.lastUpdateDate = Date.now();
 
@@ -110,4 +108,8 @@ export const updateAreaChemicals = async (req: any, res: Response) => {
     return res.status(202).json({
         area
     });
+}
+
+function tittleCase(leader: any): any {
+    throw new Error('Function not implemented.');
 }

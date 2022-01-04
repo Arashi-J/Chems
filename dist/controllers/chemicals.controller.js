@@ -63,7 +63,7 @@ const getChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getChemical = getChemical;
 const createChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppes } = req.body;
+    const { chemical, hazards, providers, manufacturers, pPhrases, hPhrases, ppes, sds, status } = req.body;
     const newChemical = new chemical_1.ChemicalModel({
         chemical: (0, text_normalizers_1.textNormalizer)(chemical),
         hazards,
@@ -72,8 +72,13 @@ const createChemical = (req, res) => __awaiter(void 0, void 0, void 0, function*
         pPhrases,
         hPhrases,
         ppes,
+        sds,
+        status,
         lastUpdatedBy: req.user._id
     });
+    if (newChemical.sds.language) {
+        newChemical.sds.language = newChemical.sds.language.toLowerCase();
+    }
     newChemical.save();
     return res.status(201).json({
         newChemical
@@ -107,20 +112,20 @@ const updateChemical = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.updateChemical = updateChemical;
 const approveChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const user = req.user;
-    if (user.role === 'fsms_approver') {
+    const { role } = req.user;
+    if (role === 'fsms_approver') {
         const fsms = {
             approval: true,
             approver: req.user._id,
             approvalDate: Date.now()
         };
-        const chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, { fsms }, { new: true })
+        const Chemical = yield chemical_1.ChemicalModel.findByIdAndUpdate(id, { fsms }, { new: true })
             .populate('fsms.approver', 'name');
         return res.status(202).json({
-            chemical
+            Chemical
         });
     }
-    else if (user.role === 'ems_approver') {
+    else if (role === 'ems_approver') {
         const ems = {
             approval: true,
             approver: req.user._id,
@@ -132,7 +137,7 @@ const approveChemical = (req, res) => __awaiter(void 0, void 0, void 0, function
             chemical
         });
     }
-    else if (user.role === 'oshms_approver') {
+    else if (role === 'oshms_approver') {
         const oshms = {
             approval: true,
             approver: req.user._id,

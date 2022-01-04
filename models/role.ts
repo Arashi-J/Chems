@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { Role } from '../interfaces/interfaces';
 
 const RoleSchema = new Schema<Role>({
@@ -13,6 +13,11 @@ const RoleSchema = new Schema<Role>({
     }
 
 });
+
+RoleSchema.methods.toJSON = function () {
+    const { __v, ...role } = this.toObject();
+    return role
+}
 
 
 

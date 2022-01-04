@@ -13,4 +13,9 @@ const PpeSchema = new Schema<Ppe>({
     }
 });
 
+PpeSchema.methods.toJSON = function () {
+    const { __v, ...ppe } = this.toObject();
+    return ppe
+}
+
 export const PpeModel = model<Ppe>('Ppe', PpeSchema);

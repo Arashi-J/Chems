@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { check } from 'express-validator';
+import { body, param } from 'express-validator';
 
 import { jwtValidator } from '../middlewares/jwt-validator';
 import { areaValidator, requestValidator, roleValidator } from '../middlewares/middlewares';
@@ -17,8 +17,8 @@ router.get('/', getAreas);
 
 //Look for area by id
 router.get('/:id', [
-    check('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
-    check('id').custom(existingAreaId),
+    param('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
+    param('id').custom(existingAreaId),
     requestValidator
 ], getArea);
 
@@ -28,11 +28,10 @@ router.get('/:id', [
 router.post('/', [
     jwtValidator,
     roleValidator('admin'),
-    check('area', 'El nombre del área no puede estar vacío').notEmpty(),
-    check('area').custom(existingArea),
-    check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
-    check('chemicals').custom(validChemicals),
-
+    body('area', 'El nombre del área no puede estar vacío').notEmpty(),
+    body('area').custom(existingArea),
+    body('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
+    body('chemicals').custom(validChemicals).optional({ nullable: true }),
     requestValidator
 ], createArea);
 
@@ -40,23 +39,23 @@ router.post('/', [
 router.put('/:id', [
     jwtValidator,
     roleValidator('admin'),
-    check('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
-    check('id').custom(existingAreaId),
-    check('area').custom(existingArea).optional({ nullable: true }),
-    check('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
-    check('chemicals', 'No se recibió un array de sustancias químicas').isArray().optional({ nullable: true }),
-    check('chemicals').custom(validChemicals).optional({ nullable: true }),
+    param('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
+    param('id').custom(existingAreaId),
+    body('area').custom(existingArea).optional({ nullable: true }),
+    body('status', "el estado debe ser un booleano").isBoolean().optional({ nullable: true }),
+    body('chemicals', 'No se recibió un array de sustancias químicas').isArray().optional({ nullable: true }),
+    body('chemicals').custom(validChemicals).optional({ nullable: true }),
     requestValidator
 ], updateArea);
 
 //Update area's chemicals
 router.patch('/:id', [
     jwtValidator,
-    check('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
-    check('id').custom(existingAreaId),
+    param('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
+    param('id').custom(existingAreaId),
     areaValidator,
-    check('chemicals', 'No se recibió un array de sustancias químicas').isArray().optional({ nullable: true }),
-    check('chemicals').custom(validChemicals).optional({ nullable: true }),
+    body('chemicals', 'No se recibió un array de sustancias químicas').isArray().optional({ nullable: true }),
+    body('chemicals').custom(validChemicals).optional({ nullable: true }),
     requestValidator
 ], updateAreaChemicals);
 

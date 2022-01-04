@@ -16,6 +16,10 @@ const AreaSchema = new Schema<Area>({
         type: [Schema.Types.ObjectId],
         ref: 'Chemical'
     },
+    leader: {
+        type: String,
+        default: ''
+    },
     lastUpdatedBy: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -26,6 +30,10 @@ const AreaSchema = new Schema<Area>({
     }
 });
 
+AreaSchema.methods.toJSON = function () {
+    const { __v, ...area } = this.toObject();
+    return area
+}
 
 
 export const AreaModel = model<Area>('Area', AreaSchema);

@@ -1,7 +1,17 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.areaValidator = exports.roleValidator = exports.requestValidator = void 0;
+exports.chemApprovalValidation = exports.areaValidator = exports.roleValidator = exports.requestValidator = void 0;
 const express_validator_1 = require("express-validator");
+const chemical_1 = require("../models/chemical");
 const requestValidator = (req, res, next) => {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
@@ -44,4 +54,26 @@ const areaValidator = (req, res, next) => {
     next();
 };
 exports.areaValidator = areaValidator;
+const chemApprovalValidation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { role } = req.user;
+    const chemical = ((yield chemical_1.ChemicalModel.findById(id)));
+    if (role === 'fsms_approver' && chemical.fsms.approval) {
+        return res.status(400).json({
+            msg: 'La sustancia química ya fue aprobada por el SGIA'
+        });
+    }
+    else if (role === 'ems_approver' && chemical.ems.approval) {
+        return res.status(400).json({
+            msg: 'La sustancia química ya fue aprobada por el SGA'
+        });
+    }
+    else if (role === 'oshms_approver' && chemical.oshms.approval) {
+        return res.status(400).json({
+            msg: 'La sustancia química ya fue aprobada por el SGSST'
+        });
+    }
+    next();
+});
+exports.chemApprovalValidation = chemApprovalValidation;
 //# sourceMappingURL=middlewares.js.map

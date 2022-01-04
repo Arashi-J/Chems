@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { check } from 'express-validator';
+import { body, param } from 'express-validator';
 
 import { jwtValidator } from '../middlewares/jwt-validator';
-import { requestValidator } from '../middlewares/middlewares';
+import { chemApprovalValidation, requestValidator } from '../middlewares/middlewares';
 
 import { existingChemicalId, existingChemical, validHazards, validPpes } from '../helpers/db-validators';
 
@@ -13,53 +13,95 @@ const router = Router();
 router.get('/', getChemicals);
 
 router.get('/:id', [
-    check('id', 'El ´parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
-    check('id').custom(existingChemicalId),
+    param('id', 'El ´parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
+    param('id').custom(existingChemicalId),
     requestValidator
 ], getChemical);
 
 router.post('/', [
     jwtValidator,
-    check('chemical', 'Se debe ingresar el nombre del químoco').notEmpty(),
-    check('chemical').custom(existingChemical),
-    check('hazards').custom(validHazards),
-    check('ppes').custom(validPpes),
-    check(['pPhrases', 'hPhrases'], 'No se recibió un Array de Phrases').isArray().optional({ nullable: true }),
-    check([
+    body('chemical', 'Se debe ingresar el nombre del químico').notEmpty(),
+    body('chemical').custom(existingChemical),
+    body([
+        'hazards',
+        'pPhrases',
+        'hPhrases',
+        'ppes',
+        'providers',
+        'manufacturers'
+    ], 'debe ser un array de valores válidos')
+        .isArray().optional({ nullable: true }),
+    body([
         'hPhrases.*.code',
-        'pPhrases.*.code',
         'hPhrases.*.description',
+        'pPhrases.*.code',
         'pPhrases.*.description',
-    ], 'Las frases P y H deben ser un arreglo de objetos tipo Phrase: [{code: string, description: string}]').isString(),
-    check(['providers', 'manufacturers'], 'El valor ingresado debe ser un Array de tipos String').isArray().optional({ nullable: true }),
-    check(['providers[*]', 'manufacturers[*]'], 'Los items del array deben ser tipo string').isString().optional({ nullable: true }),
+    ], 'No se recibieron valor tipo string para code y/o description de las phrases').exists(),
+    body([
+        'providers[*]',
+        'manufacturers[*]',
+        'hPhrases.*.code',
+        'hPhrases.*.description',
+        'pPhrases.*.code',
+        'pPhrases.*.description',
+        'sds.language',
+        'sds.link',
+    ], 'Debe ser tipo string')
+        .isString().optional({ nullable: true }),
+    body('hazards').custom(validHazards).optional({ nullable: true }),
+    body('ppes').custom(validPpes).optional({ nullable: true }),
+    body('sds.language', 'sds.language debe contener los siguientes valores: ["español", "inglés", "otro", ""]')
+        .toLowerCase().isIn(['español', "inglés", 'otro', '']).optional({ nullable: true }),
+    body(['status', "sds.status"], 'El campo status y sds.status deben ser tipo boolean')
+        .isBoolean().optional({ nullable: true }),
     requestValidator
 ], createChemical);
 
 router.put('/:id', [
     jwtValidator,
-    check('id', 'El ´parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
-    check('id').custom(existingChemicalId),
-    check('chemical').custom(existingChemical).optional({ nullable: true }),
-    check('hazards').custom(validHazards).optional({ nullable: true }),
-    check('ppes').custom(validPpes).optional({ nullable: true }),
-    check(['pPhrases', 'hPhrases'], 'No se recibió un Array de Phrases').isArray().optional({ nullable: true }),
-    check([
+    param('id', 'El ´parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
+    param('id').custom(existingChemicalId),
+    body('chemical').custom(existingChemical),
+    body([
+        'hazards',
+        'pPhrases',
+        'hPhrases',
+        'ppes',
+        'providers',
+        'manufacturers'
+    ], 'debe ser un array de valores válidos')
+        .isArray().optional({ nullable: true }),
+    body([
         'hPhrases.*.code',
-        'pPhrases.*.code',
         'hPhrases.*.description',
+        'pPhrases.*.code',
         'pPhrases.*.description',
-    ], 'Las frases P y H deben ser un arreglo de objetos tipo Phrase: [{code: string, description: string}]').isString(),
-    check(['providers', 'manufacturers'], 'Los items del array deben ser tipo string').isArray().optional({ nullable: true }),
-    check(['providers[*]', 'manufacturers[*]'], 'Los items del array deben ser tipo string').isString().optional({ nullable: true }),
-    check('status', 'El campo status deben ser tipo Boolean').isBoolean().optional({ nullable: true }),
+    ], 'No se recibieron valor tipo string para code y/o description de las phrases').exists(),
+    body([
+        'providers[*]',
+        'manufacturers[*]',
+        'hPhrases.*.code',
+        'hPhrases.*.description',
+        'pPhrases.*.code',
+        'pPhrases.*.description',
+        'sds.language',
+        'sds.link',
+    ], 'Debe ser tipo string')
+        .isString().optional({ nullable: true }),
+    body('hazards').custom(validHazards).optional({ nullable: true }),
+    body('ppes').custom(validPpes).optional({ nullable: true }),
+    body('sds.language', 'sds.language debe contener los siguientes valores: ["español", "inglés", "otro", ""]')
+        .toLowerCase().isIn(['español', "inglés", 'otro', '']).optional({ nullable: true }),
+    body(['status', "sds.status"], 'El campo status y sds.status deben ser tipo boolean')
+        .isBoolean().optional({ nullable: true }),
     requestValidator
 ], updateChemical);
 
 router.patch('/:id', [
     jwtValidator,
-    check('id', 'El parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
-    check('id').custom(existingChemicalId),
+    param('id', 'El parámetro de búsqueda no es un MongoDB id válido.').isMongoId(),
+    param('id').custom(existingChemicalId),
+    chemApprovalValidation,
     requestValidator
 ], approveChemical);
 
