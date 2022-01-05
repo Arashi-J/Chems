@@ -10,5 +10,9 @@ router.get('/:id', [
     (0, express_validator_1.param)('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
     middlewares_1.requestValidator
 ], ppes_controllers_1.getPpe);
+router.get('/:id/pictogram', [
+    (0, express_validator_1.param)('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
+    middlewares_1.requestValidator
+], ppes_controllers_1.showPpeIcon);
 exports.default = router;
 //# sourceMappingURL=ppes.routes.js.map

@@ -1,26 +1,26 @@
 [
     {
         "ppe": "Botas",
-        "img": "./img/ppe-icons/boots.png"
+        "img": "/assets/img/ppe-icons/boots.png"
     },
     {
         "ppe": "Careta",
-        "img": "./img/ppe-icons/face-shield.png"
+        "img": "/assets/img/ppe-icons/face-shield.png"
     },
     {
         "ppe": "Máscara de gas",
-        "img": "./img/ppe-icons/gas-mask.png"
+        "img": "/assets/img/ppe-icons/gas-mask.png"
     },
     {
         "ppe": "Gafas de seguridad",
-        "img": "./img/ppe-icons/glasses.png"
+        "img": "/assets/img/ppe-icons/glasses.png"
     },
     {
         "ppe": "Guantes",
-        "img": "./img/ppe-icons/gloves.png"
+        "img": "/assets/img/ppe-icons/gloves.png"
     },
     {
         "ppe": "Traje de proctección",
-        "img": "./img/ppe-icons/protective-suit.png"
+        "img": "/assets/img/ppe-icons/protective-suit.png"
     }
 ]

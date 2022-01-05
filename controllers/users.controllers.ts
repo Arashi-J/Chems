@@ -3,7 +3,6 @@ import { UserModel } from '../models/user';
 import bcryptjs from 'bcryptjs';
 import { titleCase } from '../helpers/text-normalizers';
 
-
 //List Users
 export const getUsers = async (req: Request, res: Response) => {
 
@@ -36,15 +35,9 @@ export const getUser = async (req: Request, res: Response) => {
         .populate('areas', 'area',)
         .populate('lastUpdatedBy', 'name');
 
-    if (user) {
-        return res.status(200).json({
-            user
-        })
-    }
-
-    return res.status(404).json({
-        msg: 'Usuario no encontrado'
-    });
+    return res.status(200).json({
+        user
+    })
 }
 
 //Create user

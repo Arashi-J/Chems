@@ -1,3 +1,5 @@
+import { join } from 'path';
+import { existsSync } from 'fs';
 import { Request, Response } from 'express';
 import { PpeModel } from '../models/ppe';
 
@@ -30,4 +32,17 @@ export const getPpe = async (req: Request, res: Response) => {
     return res.status(404).json({
         msg: 'EPP no encontrado'
     });
+}
+
+export const showPpeIcon = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const ppe = await PpeModel.findById(id);
+
+    if (!ppe) {
+        return res.status(404).json({
+            msg: 'EPP no encontrado'
+        });
+    }
+    return res.redirect(ppe.img);
 }

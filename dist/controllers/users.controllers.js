@@ -50,13 +50,8 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_1.UserModel.findById(id)
         .populate('areas', 'area')
         .populate('lastUpdatedBy', 'name');
-    if (user) {
-        return res.status(200).json({
-            user
-        });
-    }
-    return res.status(404).json({
-        msg: 'Usuario no encontrado'
+    return res.status(200).json({
+        user
     });
 });
 exports.getUser = getUser;

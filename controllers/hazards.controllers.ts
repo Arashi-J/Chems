@@ -32,3 +32,16 @@ export const getHazard = async (req: Request, res: Response) => {
     });
 }
 
+export const showHazardPictogram = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const hazard = await HazardModel.findById(id);
+
+    if (!hazard) {
+        return res.status(404).json({
+            msg: 'Peligro no encontrado'
+        });
+    }
+    return res.redirect(hazard.pictogram)
+}
+

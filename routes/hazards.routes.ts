@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { param } from 'express-validator';
-import { getHazards, getHazard } from '../controllers/hazards.controllers';
+import { getHazards, getHazard, showHazardPictogram } from '../controllers/hazards.controllers';
 import { requestValidator } from '../middlewares/middlewares';
 
 
@@ -13,5 +13,10 @@ router.get('/:id', [
     param('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
     requestValidator
 ], getHazard);
+
+router.get('/:id/pictogram', [
+    param('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
+    requestValidator
+], showHazardPictogram);
 
 export default router;

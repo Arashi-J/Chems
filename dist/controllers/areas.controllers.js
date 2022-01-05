@@ -23,7 +23,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateAreaChemicals = exports.updateArea = exports.createArea = exports.getArea = exports.getAreas = void 0;
 const area_1 = require("../models/area");
 const text_normalizers_1 = require("../helpers/text-normalizers");
-//List areas
 const getAreas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultsLimit = 10, searchFrom = 0, areaStatus = 'all' } = req.query;
     const query = areaStatus === 'active' ? { status: true } :
@@ -40,23 +39,16 @@ const getAreas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.getAreas = getAreas;
-//Look for area by id
 const getArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const area = yield area_1.AreaModel.findById(id)
         .populate('chemicals', 'chemical')
         .populate('lastUpdatedBy', 'name');
-    if (area) {
-        return res.status(200).json({
-            area
-        });
-    }
-    return res.status(404).json({
-        msg: 'Área no encontrada'
+    return res.status(200).json({
+        area
     });
 });
 exports.getArea = getArea;
-//Create area
 const createArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { area, chemicals, leader } = req.body;
     const newArea = new area_1.AreaModel({
@@ -71,7 +63,6 @@ const createArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
 });
 exports.createArea = createArea;
-//Update area
 const updateArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const _a = req.body, { _id, __v } = _a, newAreaData = __rest(_a, ["_id", "__v"]);
@@ -93,7 +84,6 @@ const updateArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
 });
 exports.updateArea = updateArea;
-//Update area's chemicals
 const updateAreaChemicals = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { chemicals } = req.body;

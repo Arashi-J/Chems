@@ -21,6 +21,7 @@ const auth_routes_1 = __importDefault(require("../routes/auth.routes"));
 const chemicals_routes_1 = __importDefault(require("../routes/chemicals.routes"));
 const hazards_routes_1 = __importDefault(require("../routes/hazards.routes"));
 const ppes_routes_1 = __importDefault(require("../routes/ppes.routes"));
+const search_routes_1 = __importDefault(require("../routes/search.routes"));
 const users_routes_1 = __importDefault(require("../routes/users.routes"));
 class Server {
     constructor() {
@@ -30,6 +31,7 @@ class Server {
             chemicals: '/api/chemicals',
             hazards: '/api/hazards',
             ppes: '/api/ppes',
+            search: '/api/search',
             users: '/api/users',
         };
         this.app = (0, express_1.default)();
@@ -49,8 +51,9 @@ class Server {
         this.app.use((0, cors_1.default)());
         //Body parsing
         this.app.use(express_1.default.json());
-        //Public dir
+        //Public dirs
         this.app.use(express_1.default.static('public'));
+        this.app.use('/assets', express_1.default.static('assets'));
     }
     routes() {
         this.app.use(this.apiPaths.areas, areas_routes_1.default);
@@ -58,6 +61,7 @@ class Server {
         this.app.use(this.apiPaths.chemicals, chemicals_routes_1.default);
         this.app.use(this.apiPaths.hazards, hazards_routes_1.default);
         this.app.use(this.apiPaths.ppes, ppes_routes_1.default);
+        this.app.use(this.apiPaths.search, search_routes_1.default);
         this.app.use(this.apiPaths.users, users_routes_1.default);
     }
     listen() {

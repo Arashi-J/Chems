@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getHazard = exports.getHazards = void 0;
+exports.showHazardPictogram = exports.getHazard = exports.getHazards = void 0;
 const hazard_1 = require("../models/hazard");
 const getHazards = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultsLimit = 10, searchFrom = 0 } = req.query;
@@ -36,4 +36,15 @@ const getHazard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.getHazard = getHazard;
+const showHazardPictogram = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const hazard = yield hazard_1.HazardModel.findById(id);
+    if (!hazard) {
+        return res.status(404).json({
+            msg: 'Peligro no encontrado'
+        });
+    }
+    return res.redirect(hazard.pictogram);
+});
+exports.showHazardPictogram = showHazardPictogram;
 //# sourceMappingURL=hazards.controllers.js.map

@@ -8,6 +8,7 @@ import authRoutes from '../routes/auth.routes';
 import chemicalsRoutes from '../routes/chemicals.routes';
 import hazardsRoutes from '../routes/hazards.routes';
 import ppesRoutes from '../routes/ppes.routes';
+import searchRoutes from '../routes/search.routes';
 import usersRoutes from '../routes/users.routes';
 
 export class Server {
@@ -19,6 +20,7 @@ export class Server {
         chemicals: '/api/chemicals',
         hazards: '/api/hazards',
         ppes: '/api/ppes',
+        search: '/api/search',
         users: '/api/users',
     }
 
@@ -44,8 +46,9 @@ export class Server {
         //Body parsing
         this.app.use(express.json());
 
-        //Public dir
+        //Public dirs
         this.app.use(express.static('public'));
+        this.app.use('/assets',express.static('assets'));
 
     }
 
@@ -55,6 +58,7 @@ export class Server {
         this.app.use(this.apiPaths.chemicals, chemicalsRoutes);
         this.app.use(this.apiPaths.hazards, hazardsRoutes);
         this.app.use(this.apiPaths.ppes, ppesRoutes);
+        this.app.use(this.apiPaths.search, searchRoutes);
         this.app.use(this.apiPaths.users, usersRoutes);
     }
 

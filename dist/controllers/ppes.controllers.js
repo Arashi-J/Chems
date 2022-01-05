@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPpe = exports.getPpes = void 0;
+exports.showPpeIcon = exports.getPpe = exports.getPpes = void 0;
 const ppe_1 = require("../models/ppe");
 const getPpes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { resultsLimit = 10, searchFrom = 0 } = req.query;
@@ -36,4 +36,15 @@ const getPpe = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.getPpe = getPpe;
+const showPpeIcon = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const ppe = yield ppe_1.PpeModel.findById(id);
+    if (!ppe) {
+        return res.status(404).json({
+            msg: 'EPP no encontrado'
+        });
+    }
+    return res.redirect(ppe.img);
+});
+exports.showPpeIcon = showPpeIcon;
 //# sourceMappingURL=ppes.controllers.js.map

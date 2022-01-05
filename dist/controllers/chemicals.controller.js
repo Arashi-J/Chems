@@ -52,13 +52,8 @@ const getChemical = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         .populate('ems.approver', 'name')
         .populate('oshms.approver', 'name')
         .populate('lastUpdatedBy', 'name');
-    if (chemical) {
-        return res.status(200).json({
-            chemical
-        });
-    }
-    return res.status(404).json({
-        msg: 'Sustancia química no encontrada'
+    return res.status(200).json({
+        chemical
     });
 });
 exports.getChemical = getChemical;

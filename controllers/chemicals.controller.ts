@@ -37,15 +37,10 @@ export const getChemical = async (req: Request, res: Response) => {
         .populate('oshms.approver', 'name')
         .populate('lastUpdatedBy', 'name');
 
-    if (chemical) {
-        return res.status(200).json({
-            chemical
-        });
-    }
+    return res.status(200).json({
+        chemical
+    });
 
-    return res.status(404).json({
-        msg: 'Sustancia química no encontrada'
-    })
 }
 export const createChemical = async (req: any, res: Response) => {
     const {

@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import { AreaModel } from '../models/area';
 import { textNormalizer, titleCase } from '../helpers/text-normalizers';
 
-
-//List areas
 export const getAreas = async (req: Request, res: Response) => {
 
     const { resultsLimit = 10, searchFrom = 0, areaStatus = 'all' } = req.query;
@@ -24,7 +22,6 @@ export const getAreas = async (req: Request, res: Response) => {
         totalAreas
     });
 }
-//Look for area by id
 export const getArea = async (req: Request, res: Response) => {
     const { id } = req.params;
 
@@ -32,17 +29,12 @@ export const getArea = async (req: Request, res: Response) => {
         .populate('chemicals', 'chemical')
         .populate('lastUpdatedBy', 'name');
 
-    if (area) {
-        return res.status(200).json({
-            area
-        });
-    }
-    return res.status(404).json({
-        msg: 'Área no encontrada'
+    return res.status(200).json({
+        area
     });
+
 }
 
-//Create area
 export const createArea = async (req: any, res: Response) => {
 
     const { area, chemicals, leader } = req.body;
@@ -60,7 +52,6 @@ export const createArea = async (req: any, res: Response) => {
     });
 }
 
-//Update area
 export const updateArea = async (req: any, res: Response) => {
 
     const { id } = req.params;
@@ -86,7 +77,6 @@ export const updateArea = async (req: any, res: Response) => {
     });
 }
 
-//Update area's chemicals
 export const updateAreaChemicals = async (req: any, res: Response) => {
 
     const { id } = req.params;

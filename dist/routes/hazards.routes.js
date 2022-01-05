@@ -10,5 +10,9 @@ router.get('/:id', [
     (0, express_validator_1.param)('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
     middlewares_1.requestValidator
 ], hazards_controllers_1.getHazard);
+router.get('/:id/pictogram', [
+    (0, express_validator_1.param)('id', 'El parámetro de búsqueda no es un MongoID válido').isMongoId(),
+    middlewares_1.requestValidator
+], hazards_controllers_1.showHazardPictogram);
 exports.default = router;
 //# sourceMappingURL=hazards.routes.js.map
