@@ -5,7 +5,9 @@ import { dbConnection } from "../database/config.db";
 
 import areasRoutes from '../routes/areas.routes';
 import authRoutes from '../routes/auth.routes';
-import chemicalRoutes from '../routes/chemicals.routes';
+import chemicalsRoutes from '../routes/chemicals.routes';
+import hazardsRoutes from '../routes/hazards.routes';
+import ppesRoutes from '../routes/ppes.routes';
 import usersRoutes from '../routes/users.routes';
 
 export class Server {
@@ -15,7 +17,9 @@ export class Server {
         areas: '/api/areas',
         auth: '/api/auth',
         chemicals: '/api/chemicals',
-        users: '/api/users'
+        hazards: '/api/hazards',
+        ppes: '/api/ppes',
+        users: '/api/users',
     }
 
     constructor() {
@@ -33,7 +37,7 @@ export class Server {
         await dbConnection();
     }
 
-    middlewares(){
+    middlewares() {
         //CORS
         this.app.use(cors());
 
@@ -45,10 +49,12 @@ export class Server {
 
     }
 
-    routes(){
+    routes() {
         this.app.use(this.apiPaths.areas, areasRoutes);
         this.app.use(this.apiPaths.auth, authRoutes);
-        this.app.use(this.apiPaths.chemicals, chemicalRoutes);
+        this.app.use(this.apiPaths.chemicals, chemicalsRoutes);
+        this.app.use(this.apiPaths.hazards, hazardsRoutes);
+        this.app.use(this.apiPaths.ppes, ppesRoutes);
         this.app.use(this.apiPaths.users, usersRoutes);
     }
 

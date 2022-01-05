@@ -31,12 +31,6 @@ export const roleValidator = (...roles: string[]) => {
 
 export const areaValidator = (req: any, res: Response, next: NextFunction) => {
 
-    if (!req.user) {
-        return res.status(400).json({
-            msg: 'No hay usuario autenticado para validar el área'
-        });
-    }
-
     const { id } = req.params;
 
     const areas = req.user.areas.toString().split(',')

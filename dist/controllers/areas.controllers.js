@@ -62,7 +62,7 @@ const createArea = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const newArea = new area_1.AreaModel({
         area: (0, text_normalizers_1.textNormalizer)(area),
         chemicals,
-        leader: tittleCase(leader),
+        leader: (0, text_normalizers_1.titleCase)(leader),
         lastUpdatedBy: req.user._id
     });
     yield newArea.save();
@@ -112,7 +112,4 @@ const updateAreaChemicals = (req, res) => __awaiter(void 0, void 0, void 0, func
     });
 });
 exports.updateAreaChemicals = updateAreaChemicals;
-function tittleCase(leader) {
-    throw new Error('Function not implemented.');
-}
 //# sourceMappingURL=areas.controllers.js.map

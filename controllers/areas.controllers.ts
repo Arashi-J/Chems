@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AreaModel } from '../models/area';
-import { textNormalizer } from '../helpers/text-normalizers';
+import { textNormalizer, titleCase } from '../helpers/text-normalizers';
 
 
 //List areas
@@ -50,11 +50,11 @@ export const createArea = async (req: any, res: Response) => {
     const newArea = new AreaModel({
         area: textNormalizer(area),
         chemicals,
-        leader: tittleCase(leader),
+        leader: titleCase(leader),
         lastUpdatedBy: req.user._id
     });
     await newArea.save();
-    
+
     return res.status(201).json({
         newArea
     });
@@ -110,6 +110,3 @@ export const updateAreaChemicals = async (req: any, res: Response) => {
     });
 }
 
-function tittleCase(leader: any): any {
-    throw new Error('Function not implemented.');
-}

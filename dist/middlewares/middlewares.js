@@ -37,11 +37,6 @@ const roleValidator = (...roles) => {
 };
 exports.roleValidator = roleValidator;
 const areaValidator = (req, res, next) => {
-    if (!req.user) {
-        return res.status(400).json({
-            msg: 'No hay usuario autenticado para validar el área'
-        });
-    }
     const { id } = req.params;
     const areas = req.user.areas.toString().split(',');
     if (req.user.role !== 'admin' && !areas.includes(id)) {
