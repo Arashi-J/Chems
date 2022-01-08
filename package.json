@@ -4,7 +4,11 @@
   "description": "Learning project rest API using node and typescript",
   "main": "index.ts",
   "scripts": {
-    "test": "nodemon dist/index.js"
+    "test": "nodemon dist/index.js",
+    "start": "node dist/index.js",
+    "postinstall": "tsc",
+    "watch-node": "nodemon dist/index.js",
+    "watch-ts": "tsc -w"
   },
   "repository": {
     "type": "git",
