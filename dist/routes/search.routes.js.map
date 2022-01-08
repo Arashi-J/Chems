@@ -1,1 +1,1 @@
-{"version":3,"file":"search.routes.js","sourceRoot":"","sources":["../../routes/search.routes.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AAEjC,MAAM,MAAM,GAAG,IAAA,gBAAM,GAAE,CAAC;AAExB,kBAAe,MAAM,CAAC"}
+{"version":3,"file":"search.routes.js","sourceRoot":"","sources":["../../routes/search.routes.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AACjC,0EAA2D;AAE3D,MAAM,MAAM,GAAG,IAAA,gBAAM,GAAE,CAAC;AAExB,MAAM,CAAC,GAAG,CAAC,oBAAoB,EAAE,2BAAM,CAAC,CAAC;AAEzC,kBAAe,MAAM,CAAC"}

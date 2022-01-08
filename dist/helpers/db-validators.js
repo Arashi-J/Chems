@@ -17,6 +17,7 @@ const chemical_1 = require("../models/chemical");
 const text_normalizers_1 = require("./text-normalizers");
 const hazard_1 = require("../models/hazard");
 const ppe_1 = require("../models/ppe");
+const mongoose_1 = require("mongoose");
 const existingUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const existingUser = yield user_1.UserModel.findById(id);
     if (!existingUser) {
@@ -75,7 +76,7 @@ const validAreas = (areas) => __awaiter(void 0, void 0, void 0, function* () {
     }
     else {
         for (const areaId of areas) {
-            if (areaId.length !== 24) {
+            if (!(0, mongoose_1.isValidObjectId)(areaId)) {
                 throw new Error(`El valor ${areaId} no es un id de MongoDB válido`);
             }
             const validArea = yield area_1.AreaModel.findById(areaId);
@@ -92,7 +93,7 @@ const validChemicals = (chemicals = []) => __awaiter(void 0, void 0, void 0, fun
     }
     else {
         for (const chemicalId of chemicals) {
-            if (chemicalId.length !== 24) {
+            if (!(0, mongoose_1.isValidObjectId)(chemicalId)) {
                 throw new Error(`El valor ${chemicalId} no es un id de MongoDB válido`);
             }
             const validChemical = yield chemical_1.ChemicalModel.findById(chemicalId);
@@ -105,7 +106,7 @@ const validChemicals = (chemicals = []) => __awaiter(void 0, void 0, void 0, fun
 exports.validChemicals = validChemicals;
 const validHazards = (hazards = []) => __awaiter(void 0, void 0, void 0, function* () {
     for (const hazardId of hazards) {
-        if (hazardId.length !== 24) {
+        if (!(0, mongoose_1.isValidObjectId)(hazardId)) {
             throw new Error(`El valor ${hazardId} no es un id de MongoDB válido`);
         }
         const validHazard = yield hazard_1.HazardModel.findById(hazardId);
@@ -117,7 +118,7 @@ const validHazards = (hazards = []) => __awaiter(void 0, void 0, void 0, functio
 exports.validHazards = validHazards;
 const validPpes = (ppes = []) => __awaiter(void 0, void 0, void 0, function* () {
     for (const ppedId of ppes) {
-        if (ppedId.length !== 24) {
+        if (!(0, mongoose_1.isValidObjectId)(ppedId)) {
             throw new Error(`El valor ${ppedId} no es un id de MongoDB válido`);
         }
         const validChemical = yield ppe_1.PpeModel.findById(ppedId);

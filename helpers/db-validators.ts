@@ -5,6 +5,7 @@ import { ChemicalModel } from '../models/chemical';
 import { textNormalizer } from './text-normalizers';
 import { HazardModel } from '../models/hazard';
 import { PpeModel } from '../models/ppe';
+import { isValidObjectId } from 'mongoose';
 
 export const existingUserId = async (id: string) => {
     const existingUser = await UserModel.findById(id);
@@ -75,7 +76,7 @@ export const validAreas = async (areas: string[]) => {
     } else {
         for (const areaId of areas) {
 
-            if (areaId.length !== 24) {
+            if (!isValidObjectId(areaId)) {
                 throw new Error(`El valor ${ areaId } no es un id de MongoDB válido`);
             }
             const validArea = await AreaModel.findById(areaId);
@@ -92,7 +93,7 @@ export const validChemicals = async (chemicals: string[] = []) => {
         return
     } else {
         for (const chemicalId of chemicals) {
-            if (chemicalId.length !== 24) {
+            if (!isValidObjectId(chemicalId)) {
                 throw new Error(`El valor ${ chemicalId } no es un id de MongoDB válido`);
             }
             const validChemical = await ChemicalModel.findById(chemicalId);
@@ -106,7 +107,7 @@ export const validChemicals = async (chemicals: string[] = []) => {
 export const validHazards = async (hazards: string[] = []) => {
 
     for (const hazardId of hazards) {
-        if (hazardId.length !== 24) {
+        if (!isValidObjectId(hazardId)) {
             throw new Error(`El valor ${ hazardId } no es un id de MongoDB válido`);
         }
         const validHazard = await HazardModel.findById(hazardId);
@@ -119,7 +120,7 @@ export const validHazards = async (hazards: string[] = []) => {
 
 export const validPpes = async (ppes: string[] = []) => {
     for (const ppedId of ppes) {
-        if (ppedId.length !== 24) {
+        if (!isValidObjectId(ppedId)) {
             throw new Error(`El valor ${ ppedId } no es un id de MongoDB válido`);
         }
         const validChemical = await PpeModel.findById(ppedId);
